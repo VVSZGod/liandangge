@@ -114,9 +114,14 @@ public class ModeServiceImpl {
         Optional<Model> model = modelRepository.findByModelId(modelId.longValue());
         if (model.isPresent()) {
             Map<String, String> map = new HashMap<>();
-            map.put("aliUrl", model.get().getAliUrl());
-            map.put("aliPwd", model.get().getAliPwd());
-            return map;
+            String aliUrl = model.get().getAliUrl();
+            if (StringUtils.isNotEmpty(aliUrl)) {
+                map.put("aliUrl", aliUrl);
+                map.put("aliPwd", model.get().getAliPwd());
+                return map;
+            } else {
+                throw new BOException("模型还在上传中 请稍后再试");
+            }
         } else {
             throw new BOException("该模型不存在");
         }
