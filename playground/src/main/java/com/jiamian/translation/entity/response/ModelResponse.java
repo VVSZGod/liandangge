@@ -28,4 +28,7 @@ public class ModelResponse {
 
     private String description;
 
+    private Integer downloadCount;
+    private String rating;
+
 }

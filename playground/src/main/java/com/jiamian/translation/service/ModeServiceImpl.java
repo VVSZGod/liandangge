@@ -79,6 +79,10 @@ public class ModeServiceImpl {
                         if (meta.isPresent() && StringUtils.isNotEmpty(meta.get().getQiniuUrl())) {
                             modelResponse.setImageUrl(meta.get().getQiniuUrl());
                         }
+                        if (model.getAliUrl().isEmpty()) {
+                            modelResponse.setDownloadCount(0);
+                            modelResponse.setRating("0.0");
+                        }
                         return modelResponse;
                     }
                 });
@@ -93,9 +97,10 @@ public class ModeServiceImpl {
 
     public ModelDetailResponse modelDetail(Long userId, Long modelId) {
         ModelDetailResponse modelDetailResponse = new ModelDetailResponse();
-        Optional<Model> model = modelRepository.findByModelId(modelId);
-        if (model.isPresent()) {
-            BeanUtil.copyProperties(model.get(), modelDetailResponse);
+        Optional<Model> optionalModel = modelRepository.findByModelId(modelId);
+        if (optionalModel.isPresent()) {
+            Model model = optionalModel.get();
+            BeanUtil.copyProperties(model, modelDetailResponse);
             List<Meta> metaList = metaRepository.findByModelId(modelId);
             List<MetaDTO> metaDTOList = metaList.stream().map(meta -> {
                 MetaDTO metaDTO = new MetaDTO();
@@ -103,6 +108,10 @@ public class ModeServiceImpl {
                 return metaDTO;
             }).collect(Collectors.toList());
             modelDetailResponse.setModelUrl("");
+            if (model.getAliUrl().isEmpty()) {
+                modelDetailResponse.setDownloadCount(0);
+                modelDetailResponse.setRating("0.0");
+            }
             modelDetailResponse.setMetaDTOList(metaDTOList);
         } else {
             throw new BOException("该模型不存在");
