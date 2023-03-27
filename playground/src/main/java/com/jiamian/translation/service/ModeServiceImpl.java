@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.jiamian.translation.common.entity.Page;
 import com.jiamian.translation.common.enums.YesOrNo;
 import com.jiamian.translation.common.exception.BOException;
+import com.jiamian.translation.dao.redis.ModelRedisService;
 import com.jiamian.translation.dao.repository.MetaRepository;
 import com.jiamian.translation.dao.repository.ModelRepository;
 import com.jiamian.translation.entity.dto.MetaDTO;
@@ -46,6 +47,9 @@ public class ModeServiceImpl {
 
     @Autowired
     private ModelRepository modelRepository;
+
+    @Autowired
+    private ModelRedisService modelRedisService;
 
     public Page<ModelResponse> pageModel(Integer pageNo, Integer pageSize, String key) {
 
@@ -134,5 +138,24 @@ public class ModeServiceImpl {
         } else {
             throw new BOException("该模型不存在");
         }
+    }
+
+    public Map<String, Integer> getModelCount() {
+        Map<String, Integer> map = new HashMap<>();
+        int modelTotalCount = modelRedisService.getModelTotalCount();
+        int modelUploadCount = modelRedisService.getModelUploadCount();
+        map.put("modelTotalCount", modelTotalCount);
+        map.put("modelUploadCount", modelUploadCount);
+        if (modelTotalCount == 0) {
+            int selectModelCount = modelRepository.selectModelCount();
+            map.put("modelTotalCount", selectModelCount);
+            modelRedisService.setModelTotalCount(selectModelCount);
+        }
+        if (modelUploadCount == 0) {
+            int selectModelUploadCount = modelRepository.selectModelUploadCount();
+            map.put("modelUploadCount", selectModelUploadCount);
+            modelRedisService.setModelUploadCount(selectModelUploadCount);
+        }
+        return map;
     }
 }

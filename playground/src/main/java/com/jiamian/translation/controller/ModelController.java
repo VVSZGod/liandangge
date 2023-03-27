@@ -60,4 +60,10 @@ public class ModelController {
         UserTokenUtil.needLogin(userId);
         return JsonResult.succResult(modeService.getModelUrl(modelId));
     }
+
+    @GetMapping("/count")
+    @ApiOperation("模型总数量和已经上传数量")
+    public JsonResult<Map<String, Integer>> getModelCount() {
+        return JsonResult.succResult(modeService.getModelCount());
+    }
 }
