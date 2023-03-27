@@ -38,7 +38,7 @@ public class ModelRedisService {
     }
 
     public int getModelTotalCount() {
-        Object o = redisTemplate.opsForValue().get(RedisCacheKey.MODEL_TOTAL_UPLOADED_COUNT_PREFIX);
+        Object o = redisTemplate.opsForValue().get(RedisCacheKey.MODEL_TOTAL_COUNT_PREFIX);
         return o == null ? 0 : Integer.parseInt(o.toString());
     }
 }
