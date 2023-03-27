@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://101.89.111.35:3306/app2?serverTimezone=GMT%2b8
+    username: root
+    password: Sp#23_k**
+  jpa:
+    show-sql: true
+    database: mysql
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl

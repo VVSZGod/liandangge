@@ -1,0 +1,11 @@
+dailyup:
+  # 开发者应该设置成自己的wx相关信息
+  wx:
+    app-id: wx5cf19e6863da7607
+    app-secret: 2224f6368a6effca090c62b49be022d0
+    mch-id: 111111
+    mch-key: xxxxxx
+    notify-url: http://www.example.com/wx/order/pay-notify
+    # 商户证书文件路径
+    # 请参考“商户证书”一节 https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=4_3
+    key-path: xxxxx

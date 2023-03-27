@@ -1,0 +1,11 @@
+spring:
+  redis:
+    database: 10
+    host: 101.89.111.35
+    port: 6379
+    timeout: 1000
+    jedis:
+      pool:
+        max-active: 50
+        max-idle: 0
+
