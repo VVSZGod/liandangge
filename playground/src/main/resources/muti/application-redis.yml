@@ -1,10 +1,9 @@
 spring:
   redis:
-    database: 10
-    host: 101.89.111.35
+    database: 15
+    host: 10.10.100.14
     timeout: 1000
     jedis:
       pool:
         max-active: 50
         max-idle: 0
-    password: Sp#23_k**
