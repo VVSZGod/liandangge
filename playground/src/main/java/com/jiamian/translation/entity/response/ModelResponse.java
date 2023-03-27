@@ -22,7 +22,6 @@ public class ModelResponse {
 
     private String type;
 
-    //@JsonFormat(timezone = "yyyy-MM-dd HH:mi:ss")
     private LocalDateTime createDate;
 
     private String imageUrl;
