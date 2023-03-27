@@ -54,7 +54,7 @@ public class ModeServiceImpl {
     public Page<ModelResponse> pageModel(Integer pageNo, Integer pageSize, String key) {
 
         PageRequest pageRequest = PageRequest.of(pageNo, pageSize,
-                Sort.Direction.DESC, "modelId");
+                Sort.Direction.DESC, "downloadCount", "modelId");
         Specification<Model> specification = (Specification<Model>) (
                 root, criteriaQuery, cb) -> {
             List<Predicate> predicates = Lists.newArrayList();
