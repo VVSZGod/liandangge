@@ -23,7 +23,6 @@ public class ModelVersionsApiDTO {
 	private int earlyAccessTimeFrame = 0;
 	private String description = "";
 	private String downloadUrl = "";
-	private String downloadPwd = "";
 	private List<FilesApiDTO> files;
 	private List<ImagesApiDTO> images;
 

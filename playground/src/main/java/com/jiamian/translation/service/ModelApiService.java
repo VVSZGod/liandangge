@@ -52,9 +52,14 @@ public class ModelApiService {
 	private QiNiuService qiNiuService;
 
 	private static final String MODELS_JSON_FILE_NAME = "%s_models.json";
+	private static final String MODEL_DETAIL_URL = "https://models.paomiantv.cn/models/Detail?id=%s";
 
-	public List<ModelApiDTO> uploadQiniuModelsJson() {
+	/**
+	 * 当前model信息构造json上传七牛云
+	 */
+	public void uploadQiniuModelsJson() {
 		List<ModelApiDTO> models = Lists.newArrayList();
+		String fileName = String.format(MODELS_JSON_FILE_NAME, DateUtil.formatYYYYMMDD());
 
 		Model model = new Model();
 		model.setStatus(1);
@@ -79,6 +84,8 @@ public class ModelApiService {
 				modelApiDTO.setType(dbModel.getType());
 				String trainedWords = "";
 				String baseModel = "";
+
+				String downloadUrl = String.format(MODEL_DETAIL_URL, dbModel.getModelId());
 
 				StatusApiDTO statusApiDTO = new StatusApiDTO();
 				statusApiDTO.setDownloadCount(dbModel.getDownloadCount());
@@ -109,8 +116,7 @@ public class ModelApiService {
 
 
 				ModelVersionsApiDTO mvDTO = new ModelVersionsApiDTO();
-				mvDTO.setDownloadPwd(dbModel.getAliPwd());
-				mvDTO.setDownloadUrl(dbModel.getAliUrl());
+				mvDTO.setDownloadUrl(downloadUrl);
 				mvDTO.setId(dbModel.getId());
 				mvDTO.setModelId(dbModel.getModelId());
 				mvDTO.setName(dbModel.getName());
@@ -120,7 +126,7 @@ public class ModelApiService {
 				mvDTO.setBaseModel(baseModel);
 
 				FilesApiDTO filesApiDTO = new FilesApiDTO();
-				filesApiDTO.setDownloadUrl(dbModel.getAliUrl());
+				filesApiDTO.setDownloadUrl(downloadUrl);
 				mvDTO.setFiles(Lists.newArrayList(filesApiDTO));
 
 
@@ -165,8 +171,7 @@ public class ModelApiService {
 		ApiResp apiResp = new ApiResp(item);
 
 		qiNiuService.uploadFile(new ByteArrayInputStream(JSON.toJSONString(apiResp).getBytes()),
-				String.format(MODELS_JSON_FILE_NAME, DateUtil.formatYYYYMMDD()));
-		return Lists.newArrayList();
+				fileName);
 	}
 
 	class ApiResp {
