@@ -35,4 +35,7 @@ public class ModelDetailResponse {
 
     private Integer downloadCount;
     private String rating;
+
+    private String creatorUserName;
+    private String creatorHeadThumb;
 }
