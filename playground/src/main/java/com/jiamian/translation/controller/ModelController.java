@@ -6,6 +6,7 @@ import com.jiamian.translation.common.entity.Page;
 import com.jiamian.translation.entity.response.ModelDetailResponse;
 import com.jiamian.translation.entity.response.ModelResponse;
 import com.jiamian.translation.service.ModeServiceImpl;
+import com.jiamian.translation.service.ModelApiService;
 import com.jiamian.translation.util.UserTokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -65,5 +66,15 @@ public class ModelController {
     @ApiOperation("模型总数量和已经上传数量")
     public JsonResult<Map<String, Integer>> getModelCount() {
         return JsonResult.succResult(modeService.getModelCount());
+    }
+
+    @Autowired
+    private ModelApiService modelApiService;
+
+    @GetMapping("/uppp")
+    @ApiOperation("va")
+    public JsonResult uppp(){
+        modelApiService.get();
+        return JsonResult.succResult();
     }
 }
