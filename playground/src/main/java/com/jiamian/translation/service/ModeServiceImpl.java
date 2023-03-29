@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.google.common.collect.Lists;
 import com.jiamian.translation.common.entity.Page;
+import com.jiamian.translation.common.enums.SortTypeEnum;
 import com.jiamian.translation.common.enums.YesOrNo;
 import com.jiamian.translation.common.exception.BOException;
 import com.jiamian.translation.dao.redis.ModelRedisService;
@@ -51,9 +52,17 @@ public class ModeServiceImpl {
     @Autowired
     private ModelRedisService modelRedisService;
 
-    public Page<ModelResponse> pageModel(Integer pageNo, Integer pageSize, String key, String type) {
+    public Page<ModelResponse> pageModel(Integer pageNo, Integer pageSize, String key, String type, Integer sortType) {
+        String[] desc = new String[]{"downloadCount", "modelId"};
+        if (SortTypeEnum.DOWN_COUNT.value().equals(sortType)) {
+
+        } else if (SortTypeEnum.TIME.value().equals(sortType)) {
+            desc = new String[]{"createDate", "downloadCount"};
+        } else {
+            desc = new String[]{"rating", "downloadCount"};
+        }
         PageRequest pageRequest = PageRequest.of(pageNo, pageSize,
-                Sort.Direction.DESC, "downloadCount", "modelId");
+                Sort.Direction.DESC, desc);
         Specification<Model> specification = (Specification<Model>) (
                 root, criteriaQuery, cb) -> {
             List<Predicate> predicates = Lists.newArrayList();
@@ -68,7 +77,7 @@ public class ModeServiceImpl {
                 }
                 predicates.add(cb.or(predicatesOr.toArray(new Predicate[]{})));
             }
-            if(StringUtils.isNotEmpty(type)){
+            if (StringUtils.isNotEmpty(type)) {
                 predicates.add(cb.equal(root.get("type"), type));
             }
             return cb.and(predicates.toArray(new Predicate[]{}));
