@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://101.89.111.35:3306/app2?serverTimezone=GMT%2b8
-    username: root
-    password: Sp#23_k**
+    url: jdbc:mysql://101.201.252.242/ms_model_product?serverTimezone=GMT%2b8
+    username: fotoplacedb2
+    password: Sp#23_k&1
   jpa:
     show-sql: true
     database: mysql
