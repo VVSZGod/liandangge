@@ -67,14 +67,4 @@ public class ModelController {
     public JsonResult<Map<String, Integer>> getModelCount() {
         return JsonResult.succResult(modeService.getModelCount());
     }
-
-    @Autowired
-    private ModelApiService modelApiService;
-
-    @GetMapping("/uppp")
-    @ApiOperation("va")
-    public JsonResult uppp(){
-        modelApiService.get();
-        return JsonResult.succResult();
-    }
 }
