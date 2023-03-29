@@ -96,10 +96,10 @@ public class ModelApiService {
 				modelApiDTO.setStats(statusApiDTO);
 
 				CreatorApiDTO creatorApiDTO = new CreatorApiDTO();
-				ModelCreator creator = modelCreatorRepository.findByModelId(dbModel.getModelId());
-				if (ObjectUtils.isNotEmpty(creator)) {
-					creatorApiDTO.setUsername(creator.getUsername());
-					creator.setImage("");
+				List<ModelCreator> creators = modelCreatorRepository.findByModelId(dbModel.getModelId());
+				if (CollectionUtil.isNotEmpty(creators)) {
+					creatorApiDTO.setUsername(creators.get(0).getUsername());
+					creatorApiDTO.setImage(creators.get(0).getImage());
 				}
 				modelApiDTO.setCreator(creatorApiDTO);
 
