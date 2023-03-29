@@ -11,13 +11,16 @@ import com.jiamian.translation.dao.redis.ModelRedisService;
 import com.jiamian.translation.dao.repository.MetaRepository;
 import com.jiamian.translation.dao.repository.ModelCreatorRepository;
 import com.jiamian.translation.dao.repository.ModelRepository;
+import com.jiamian.translation.dao.repository.ModelTagsRepository;
 import com.jiamian.translation.entity.dto.MetaDTO;
 import com.jiamian.translation.entity.response.ModelDetailResponse;
 import com.jiamian.translation.entity.response.ModelResponse;
 import com.jiamian.translation.model.Meta;
 import com.jiamian.translation.model.Model;
 import com.jiamian.translation.model.ModelCreator;
+import com.jiamian.translation.model.ModelTags;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.Predicate;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +59,8 @@ public class ModeServiceImpl {
 	private ModelRedisService modelRedisService;
 	@Autowired
 	private ModelCreatorRepository modelCreatorRepository;
+	@Autowired
+	private ModelTagsRepository modelTagsRepository;
 
 	public Page<ModelResponse> pageModel(Integer pageNo, Integer pageSize, String key) {
 
@@ -130,6 +136,19 @@ public class ModeServiceImpl {
 				modelDetailResponse.setCreatorUserName(username);
 				modelDetailResponse.setCreatorHeadThumb(headThumb);
 			}
+			List<ModelTags> modelTags = modelTagsRepository.findByModelId(modelId);
+			if (CollectionUtil.isNotEmpty(modelTags)) {
+				ModelTags modelTag = modelTags.get(0);
+				String baseModel = modelTag.getBaseModel();
+				String trainedWords = ObjectUtils.isNotEmpty(modelTag.getTrainedWords()) ? modelTag.getTrainedWords() : "";
+				String tagText = ObjectUtils.isNotEmpty(modelTag.getTagText()) ? modelTag.getTagText() : "";
+
+				modelDetailResponse.setTrainedWords(Arrays.asList(trainedWords.trim().split(",")));
+				modelDetailResponse.setTags(Arrays.asList(tagText.trim().split(",")));
+				modelDetailResponse.setBaseModel(baseModel);
+
+			}
+
 
 			modelDetailResponse.setMetaDTOList(metaDTOList);
 		} else {

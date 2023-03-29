@@ -16,26 +16,29 @@ import java.util.List;
 @Data
 public class ModelDetailResponse {
 
-    private Long id;
+	private Long id;
 
-    private Long modelId;
+	private Long modelId;
 
-    private String name;
+	private String name;
 
-    private String type;
+	private String type;
 
-    //@JsonFormat(timezone = "yyyy-MM-dd HH:mi:ss")
-    private LocalDateTime createDate;
+	//@JsonFormat(timezone = "yyyy-MM-dd HH:mi:ss")
+	private LocalDateTime createDate;
 
-    private String modelUrl;
+	private String modelUrl;
 
-    private String description;
+	private String description;
 
-    private List<MetaDTO> metaDTOList;
+	private List<MetaDTO> metaDTOList;
 
-    private Integer downloadCount;
-    private String rating;
+	private Integer downloadCount;
+	private String rating;
 
-    private String creatorUserName;
-    private String creatorHeadThumb;
+	private String creatorUserName;
+	private String creatorHeadThumb;
+	private List<String> tags;
+	private List<String> trainedWords;
+	private String baseModel;
 }
