@@ -51,8 +51,7 @@ public class ModeServiceImpl {
     @Autowired
     private ModelRedisService modelRedisService;
 
-    public Page<ModelResponse> pageModel(Integer pageNo, Integer pageSize, String key) {
-
+    public Page<ModelResponse> pageModel(Integer pageNo, Integer pageSize, String key, String type) {
         PageRequest pageRequest = PageRequest.of(pageNo, pageSize,
                 Sort.Direction.DESC, "downloadCount", "modelId");
         Specification<Model> specification = (Specification<Model>) (
@@ -68,6 +67,9 @@ public class ModeServiceImpl {
                     log.info("message{}===id{}", e.getMessage(), key);
                 }
                 predicates.add(cb.or(predicatesOr.toArray(new Predicate[]{})));
+            }
+            if(StringUtils.isNotEmpty(type)){
+                predicates.add(cb.equal(root.get("type"), type));
             }
             return cb.and(predicates.toArray(new Predicate[]{}));
         };

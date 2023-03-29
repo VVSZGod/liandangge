@@ -22,4 +22,9 @@ public class RedisCacheKey {
      */
     public static String MODEL_TOTAL_COUNT_PREFIX = "model:total:count:";
 
+
+    /**
+     * 模型类型
+     */
+    public static String MODEL_TYPE_PREFIX = "model:type:";
 }
