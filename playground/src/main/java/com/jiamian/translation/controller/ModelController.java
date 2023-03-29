@@ -6,6 +6,7 @@ import com.jiamian.translation.common.entity.Page;
 import com.jiamian.translation.entity.response.ModelDetailResponse;
 import com.jiamian.translation.entity.response.ModelResponse;
 import com.jiamian.translation.service.ModeServiceImpl;
+import com.jiamian.translation.service.ModelApiService;
 import com.jiamian.translation.util.UserTokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
