@@ -55,6 +55,9 @@ public class ModeServiceImpl {
     @Autowired
     private ModelRedisService modelRedisService;
 
+    @Autowired
+    private ModelCreatorRepository modelCreatorRepository;
+
     public Page<ModelResponse> pageModel(Integer pageNo, Integer pageSize, String key, String type, Integer sortType) {
         String[] desc = new String[]{"downloadCount", "modelId"};
         if (SortTypeEnum.DOWN_COUNT.value().equals(sortType)) {
@@ -113,39 +116,39 @@ public class ModeServiceImpl {
         return p;
     }
 
-	public ModelDetailResponse modelDetail(Long userId, Long modelId) {
-		ModelDetailResponse modelDetailResponse = new ModelDetailResponse();
-		Optional<Model> optionalModel = modelRepository.findByModelId(modelId);
-		if (optionalModel.isPresent()) {
-			Model model = optionalModel.get();
-			List<ModelCreator> modelCreators = modelCreatorRepository.findByModelId(model.getModelId());
+    public ModelDetailResponse modelDetail(Long userId, Long modelId) {
+        ModelDetailResponse modelDetailResponse = new ModelDetailResponse();
+        Optional<Model> optionalModel = modelRepository.findByModelId(modelId);
+        if (optionalModel.isPresent()) {
+            Model model = optionalModel.get();
+            List<ModelCreator> modelCreators = modelCreatorRepository.findByModelId(model.getModelId());
 
-			BeanUtil.copyProperties(model, modelDetailResponse);
-			List<Meta> metaList = metaRepository.findByModelId(modelId);
-			List<MetaDTO> metaDTOList = metaList.stream().map(meta -> {
-				MetaDTO metaDTO = new MetaDTO();
-				BeanUtil.copyProperties(meta, metaDTO);
-				return metaDTO;
-			}).collect(Collectors.toList());
-			modelDetailResponse.setModelUrl("");
-			if (model.getAliUrl().isEmpty()) {
-				modelDetailResponse.setDownloadCount(0);
-				modelDetailResponse.setRating("0.0");
-			}
+            BeanUtil.copyProperties(model, modelDetailResponse);
+            List<Meta> metaList = metaRepository.findByModelId(modelId);
+            List<MetaDTO> metaDTOList = metaList.stream().map(meta -> {
+                MetaDTO metaDTO = new MetaDTO();
+                BeanUtil.copyProperties(meta, metaDTO);
+                return metaDTO;
+            }).collect(Collectors.toList());
+            modelDetailResponse.setModelUrl("");
+            if (model.getAliUrl().isEmpty()) {
+                modelDetailResponse.setDownloadCount(0);
+                modelDetailResponse.setRating("0.0");
+            }
 
-			if (CollectionUtil.isNotEmpty(modelCreators)) {
-				String username = modelCreators.get(0).getUsername();
-				String headThumb = modelCreators.get(0).getImage();
-				modelDetailResponse.setCreatorUserName(username);
-				modelDetailResponse.setCreatorHeadThumb(headThumb);
-			}
+            if (CollectionUtil.isNotEmpty(modelCreators)) {
+                String username = modelCreators.get(0).getUsername();
+                String headThumb = modelCreators.get(0).getImage();
+                modelDetailResponse.setCreatorUserName(username);
+                modelDetailResponse.setCreatorHeadThumb(headThumb);
+            }
 
-			modelDetailResponse.setMetaDTOList(metaDTOList);
-		} else {
-			throw new BOException("该模型不存在");
-		}
-		return modelDetailResponse;
-	}
+            modelDetailResponse.setMetaDTOList(metaDTOList);
+        } else {
+            throw new BOException("该模型不存在");
+        }
+        return modelDetailResponse;
+    }
 
     public Map<String, String> getModelUrl(Integer modelId) {
         Optional<Model> model = modelRepository.findByModelId(modelId.longValue());
