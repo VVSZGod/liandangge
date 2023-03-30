@@ -1,16 +1,18 @@
 package com.jiamian.translation.dao.repository;
 
-import com.jiamian.translation.model.ModelCreator;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.jiamian.translation.model.ModelCreator;
 
 /**
  * @author DingGuangHui
  * @date 2023/3/29
  */
 @Repository
-public interface ModelCreatorRepository extends JpaRepository<ModelCreator,Long> {
+public interface ModelCreatorRepository
+		extends JpaRepository<ModelCreator, Long> {
 	List<ModelCreator> findByModelId(Long modelId);
 }

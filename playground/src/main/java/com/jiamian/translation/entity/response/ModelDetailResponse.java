@@ -1,10 +1,13 @@
 package com.jiamian.translation.entity.response;
 
-import com.jiamian.translation.entity.dto.MetaDTO;
-import lombok.Data;
-
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.jiamian.translation.entity.dto.MetaDTO;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 /**
  * @ClassName: ModelResponse
@@ -14,6 +17,7 @@ import java.util.List;
  * @Version: 1.0
  */
 @Data
+@ApiModel(value = "模型详情")
 public class ModelDetailResponse {
 
 	private Long id;
@@ -24,7 +28,6 @@ public class ModelDetailResponse {
 
 	private String type;
 
-	//@JsonFormat(timezone = "yyyy-MM-dd HH:mi:ss")
 	private LocalDateTime createDate;
 
 	private String modelUrl;
@@ -35,10 +38,15 @@ public class ModelDetailResponse {
 
 	private Integer downloadCount;
 	private String rating;
-
+	@ApiModelProperty(value = "")
 	private String creatorUserName;
+	@ApiModelProperty(value = "")
 	private String creatorHeadThumb;
+	@ApiModelProperty(value = "")
+	private String creatorLink;
+
 	private List<String> tags;
 	private List<String> trainedWords;
 	private String baseModel;
+
 }

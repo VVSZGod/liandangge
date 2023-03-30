@@ -1,6 +1,17 @@
 package com.jiamian.translation.service;
 
-import cn.hutool.core.collection.CollectionUtil;
+import java.io.ByteArrayInputStream;
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
@@ -21,17 +32,8 @@ import com.jiamian.translation.model.ModelCreator;
 import com.jiamian.translation.model.ModelTags;
 import com.jiamian.translation.util.DateUtil;
 import com.jiamian.translation.util.QiniuUtil;
-import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayInputStream;
-import java.util.Arrays;
-import java.util.List;
+import cn.hutool.core.collection.CollectionUtil;
 
 /**
  * @author DingGuangHui
@@ -59,7 +61,8 @@ public class ModelApiService {
 	 */
 	public void uploadQiniuModelsJson() {
 		List<ModelApiDTO> models = Lists.newArrayList();
-		String fileName = String.format(MODELS_JSON_FILE_NAME, DateUtil.formatYYYYMMDD());
+		String fileName = String.format(MODELS_JSON_FILE_NAME,
+				DateUtil.formatYYYYMMDD());
 
 		Model model = new Model();
 		model.setStatus(1);
@@ -70,11 +73,11 @@ public class ModelApiService {
 		List<ModelApiDTO> item = Lists.newArrayList();
 
 		do {
-			Page<Model> p = modelRepository.findAll(Example.of(model), PageRequest.of(pageIdx, pageSize, Sort.Direction.ASC,
-					"id"));
+			Page<Model> p = modelRepository.findAll(Example.of(model),
+					PageRequest.of(pageIdx, pageSize, Sort.Direction.ASC,
+							"id"));
 			dbModels = p.getContent();
 			pageIdx++;
-
 
 			for (Model dbModel : dbModels) {
 				ModelApiDTO modelApiDTO = new ModelApiDTO();
@@ -85,7 +88,8 @@ public class ModelApiService {
 				String trainedWords = "";
 				String baseModel = "";
 
-				String downloadUrl = String.format(MODEL_DETAIL_URL, dbModel.getModelId());
+				String downloadUrl = String.format(MODEL_DETAIL_URL,
+						dbModel.getModelId());
 
 				StatusApiDTO statusApiDTO = new StatusApiDTO();
 				statusApiDTO.setDownloadCount(dbModel.getDownloadCount());
@@ -96,24 +100,26 @@ public class ModelApiService {
 				modelApiDTO.setStats(statusApiDTO);
 
 				CreatorApiDTO creatorApiDTO = new CreatorApiDTO();
-				List<ModelCreator> creators = modelCreatorRepository.findByModelId(dbModel.getModelId());
+				List<ModelCreator> creators = modelCreatorRepository
+						.findByModelId(dbModel.getModelId());
 				if (CollectionUtil.isNotEmpty(creators)) {
 					creatorApiDTO.setUsername(creators.get(0).getUsername());
 					creatorApiDTO.setImage(creators.get(0).getImage());
 				}
 				modelApiDTO.setCreator(creatorApiDTO);
 
-
-				List<ModelTags> modelTags = modelTagsRepository.findByModelId(dbModel.getModelId());
+				List<ModelTags> modelTags = modelTagsRepository
+						.findByModelId(dbModel.getModelId());
 				if (CollectionUtil.isNotEmpty(modelTags)) {
 					ModelTags modelT = modelTags.get(0);
 
 					String tags = modelT.getTagText();
-					trainedWords = ObjectUtils.isNotEmpty(modelT.getTrainedWords()) ? modelT.getTrainedWords() : "";
+					trainedWords = ObjectUtils.isNotEmpty(
+							modelT.getTrainedWords()) ? modelT.getTrainedWords()
+									: "";
 					baseModel = modelT.getBaseModel();
 					modelApiDTO.setTags(Arrays.asList(tags.split(",")));
 				}
-
 
 				ModelVersionsApiDTO mvDTO = new ModelVersionsApiDTO();
 				mvDTO.setDownloadUrl(downloadUrl);
@@ -122,15 +128,16 @@ public class ModelApiService {
 				mvDTO.setName(dbModel.getName());
 				mvDTO.setCreateAt(dbModel.getCreateDate());
 				mvDTO.setUpdatedAt(dbModel.getCreateDate());
-				mvDTO.setTrainedWords(Lists.newArrayList(trainedWords.split(",")));
+				mvDTO.setTrainedWords(
+						Lists.newArrayList(trainedWords.split(",")));
 				mvDTO.setBaseModel(baseModel);
 
 				FilesApiDTO filesApiDTO = new FilesApiDTO();
 				filesApiDTO.setDownloadUrl(downloadUrl);
 				mvDTO.setFiles(Lists.newArrayList(filesApiDTO));
 
-
-				List<Meta> metas = metaRepository.findByModelId(dbModel.getModelId());
+				List<Meta> metas = metaRepository
+						.findByModelId(dbModel.getModelId());
 				List<ImagesApiDTO> images = Lists.newArrayList();
 
 				if (CollectionUtil.isNotEmpty(metas)) {
@@ -139,7 +146,8 @@ public class ModelApiService {
 						imagesApiDTO.setUrl(meta.getQiniuUrl());
 						imagesApiDTO.setNsfw(false);
 
-						JSONObject imgInfo = QiniuUtil.getImgInfo(meta.getQiniuUrl());
+						JSONObject imgInfo = QiniuUtil
+								.getImgInfo(meta.getQiniuUrl());
 						Integer width = imgInfo.getInteger("width");
 						Integer height = imgInfo.getInteger("height");
 						imagesApiDTO.setWidth(width);
@@ -153,7 +161,8 @@ public class ModelApiService {
 						metaApiDTO.setSteps(Integer.parseInt(meta.getSteps()));
 						metaApiDTO.setPrompt(meta.getPrompt());
 						metaApiDTO.setSampler(meta.getSampler());
-						metaApiDTO.setCfgScale(Double.parseDouble(meta.getCfgScale()));
+						metaApiDTO.setCfgScale(
+								Double.parseDouble(meta.getCfgScale()));
 						metaApiDTO.setNegativePrompt(meta.getNegativePrompt());
 
 						imagesApiDTO.setMeta(metaApiDTO);
@@ -170,7 +179,8 @@ public class ModelApiService {
 
 		ApiResp apiResp = new ApiResp(item);
 
-		qiNiuService.uploadFile(new ByteArrayInputStream(JSON.toJSONString(apiResp).getBytes()),
+		qiNiuService.uploadFile(
+				new ByteArrayInputStream(JSON.toJSONString(apiResp).getBytes()),
 				fileName);
 	}
 
