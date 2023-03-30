@@ -18,7 +18,7 @@ import java.util.Optional;
 public interface ModelRepository extends
         JpaRepository<Model, Long>, JpaSpecificationExecutor<Model> {
 
-    Optional<Model> findByModelId(Long modelId);
+    Optional<Model> findByModelIdAndStatus(Long modelId,Integer status);
 
     @Query(nativeQuery = true, value = "select count(*) from model where status=1 and ali_url!=''")
     int selectModelUploadCount();
