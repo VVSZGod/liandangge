@@ -1,0 +1,7 @@
+##七牛
+qiniu.access_key: JDbRmZyb74Z17YhYiUv4sQterC7BRBU7HKH-ptBf
+qiniu.bucket: msdn
+qiniu.secret_key: E1mrlUNOneqOYOn1TvCOSZAdhyGzYvDmR05hFfjD
+qiniu.domain: fpcache.fotoplace.cc
+qiniu.video.waterMarkUrl: https://system.dongsenzs.com/system/demo/watermark.png
+
