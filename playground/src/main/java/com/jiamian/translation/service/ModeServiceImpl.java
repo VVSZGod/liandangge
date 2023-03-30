@@ -80,6 +80,9 @@ public class ModeServiceImpl {
     @Autowired
     private ModelCreatorRepository modelCreatorRepository;
 
+	@Autowired
+	private ModelTagsRepository modelTagsRepository;
+
 	public Page<ModelResponse> pageModel(Integer pageNo, Integer pageSize,
 			String key, String type, Integer sortType) {
 		String[] desc = new String[] { "downloadCount", "modelId" };
