@@ -28,7 +28,7 @@ import com.jiamian.translation.dao.repository.MetaRepository;
 import com.jiamian.translation.dao.repository.ModelCreatorRepository;
 import com.jiamian.translation.dao.repository.ModelRepository;
 import com.jiamian.translation.dao.repository.ModelTagsRepository;
-import com.jiamian.translation.entity.dto.MetaDTO;
+import com.jiamian.translation.entity.dto.api.MetaDTO;
 import com.jiamian.translation.entity.response.ModelDetailResponse;
 import com.jiamian.translation.entity.response.ModelResponse;
 import com.jiamian.translation.model.Meta;

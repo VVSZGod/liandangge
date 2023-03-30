@@ -3,7 +3,7 @@ package com.jiamian.translation.entity.response;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.jiamian.translation.entity.dto.MetaDTO;
+import com.jiamian.translation.entity.dto.api.MetaDTO;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

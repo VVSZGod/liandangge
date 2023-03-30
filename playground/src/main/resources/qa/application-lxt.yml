@@ -1,0 +1,8 @@
+# 验证码超时时间（秒）
+lxt.register_code_expire : 300
+
+lxt.sms.url  : http://www.lokapi.cn/smsUTF8.aspx
+lxt.account  : 13918420031
+lxt.password : miaoshouai!
+lxt.token    : d6bf2757
+lxt.templateid    : 4E0D689D
