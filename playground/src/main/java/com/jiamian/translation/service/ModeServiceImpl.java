@@ -119,7 +119,8 @@ public class ModeServiceImpl {
 
 	public ModelDetailResponse modelDetail(Long userId, Long modelId) {
 		ModelDetailResponse modelDetailResponse = new ModelDetailResponse();
-		Optional<Model> optionalModel = modelRepository.findByModelIdAndStatus(modelId);
+		Optional<Model> optionalModel = modelRepository
+				.findByModelIdAndStatus(modelId, YesOrNo.YES.value());
 		if (optionalModel.isPresent()) {
 			Model model = optionalModel.get();
 			List<ModelCreator> modelCreators = modelCreatorRepository
@@ -174,8 +175,8 @@ public class ModeServiceImpl {
 	}
 
 	public Map<String, String> getModelUrl(Integer modelId) {
-		Optional<Model> model = modelRepository
-				.findByModelIdAndStatus(modelId.longValue());
+		Optional<Model> model = modelRepository.findByModelIdAndStatus(
+				modelId.longValue(), YesOrNo.YES.value());
 		if (model.isPresent()) {
 			Map<String, String> map = new HashMap<>();
 			String aliUrl = model.get().getAliUrl();
