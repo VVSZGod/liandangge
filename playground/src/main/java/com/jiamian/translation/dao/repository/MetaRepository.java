@@ -16,11 +16,10 @@ import java.util.Optional;
 @Repository
 public interface MetaRepository extends JpaRepository<Meta, Long> {
 
+	@Query(nativeQuery = true, value = "select * from meta where model_id=:modelId and qiniu_url!=''")
+	List<Meta> findByModelId(Long modelId);
 
-    @Query(nativeQuery = true, value = "select * from meta where model_id=:modelId and qiniu_url!=''")
-    List<Meta> findByModelId(Long modelId);
-
-    @Query(nativeQuery = true, value = "select * from meta where model_id=:modelId and qiniu_url!='' limit 1")
-    Optional<Meta> selectModelByModelIdOne(
-            @Param(value = "modelId") Long modelId);
+	@Query(nativeQuery = true, value = "select * from meta where model_id=:modelId and qiniu_url!='' limit 1")
+	Optional<Meta> selectModelByModelIdOne(
+			@Param(value = "modelId") Long modelId);
 }

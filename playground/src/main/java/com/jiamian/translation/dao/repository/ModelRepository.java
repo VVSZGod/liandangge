@@ -14,16 +14,14 @@ import com.jiamian.translation.model.Model;
  * @date 2023/2/16
  */
 @Repository
-public interface ModelRepository
-		extends JpaRepository<Model, Long>, JpaSpecificationExecutor<Model> {
-
-	Optional<Model> findByModelId(Long modelId);
+public interface ModelRepository extends
+        JpaRepository<Model, Long>, JpaSpecificationExecutor<Model> {
 
     Optional<Model> findByModelIdAndStatus(Long modelId,Integer status);
 
-	@Query(nativeQuery = true, value = "select count(*) from model where status=1 and ali_url!=''")
-	int selectModelUploadCount();
+    @Query(nativeQuery = true, value = "select count(*) from model where status=1 and ali_url!=''")
+    int selectModelUploadCount();
 
-	@Query(nativeQuery = true, value = "select count(*) from model where status=1")
-	int selectModelCount();
+    @Query(nativeQuery = true, value = "select count(*) from model where status=1")
+    int selectModelCount();
 }

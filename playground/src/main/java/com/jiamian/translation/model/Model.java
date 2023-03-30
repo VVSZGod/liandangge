@@ -18,234 +18,219 @@ import java.time.LocalDateTime;
 @DynamicUpdate
 @Table(name = "model")
 public class Model implements Serializable {
-    public static final long serialVersionUID = 2236194758442931453L;
-    private Long id;
-    private Long modelId;
-    private String name;
-    private String type;
-    private Long modelVersionId;
-    private String modelUrl;
-    private String nsfw;
-    private Integer status;
-    private String description;
-    private LocalDateTime createDate;
-    private String aliUrl;
-    private String aliPwd;
-    private Integer downloadCount;
-    private Integer favoriteCount;
-    private Integer commentCount;
-    private Integer ratingCount;
-    private String rating;
+	public static final long serialVersionUID = 2236194758442931453L;
+	private Long id;
+	private Long modelId;
+	private String name;
+	private String type;
+	private Long modelVersionId;
+	private String modelUrl;
+	private String nsfw;
+	private Integer status;
+	private String description;
+	private LocalDateTime createDate;
+	private String aliUrl;
+	private String aliPwd;
+	private Integer downloadCount;
+	private Integer favoriteCount;
+	private Integer commentCount;
+	private Integer ratingCount;
+	private String rating;
 
+	public Model() {
+	}
 
-    public Model() {
-    }
+	public Model(Long modelId, String name, String type, Long modelVersionId,
+			String modelUrl, String nsfw, Integer status, String description,
+			LocalDateTime createDate, String aliUrl, String aliPwd,
+			Integer downloadCount, Integer favoriteCount, Integer commentCount,
+			Integer ratingCount, String rating) {
+		this.modelId = modelId;
+		this.name = name;
+		this.type = type;
+		this.modelVersionId = modelVersionId;
+		this.modelUrl = modelUrl;
+		this.nsfw = nsfw;
+		this.status = status;
+		this.description = description;
+		this.createDate = createDate;
+		this.aliUrl = aliUrl;
+		this.aliPwd = aliPwd;
+		this.downloadCount = downloadCount;
+		this.favoriteCount = favoriteCount;
+		this.commentCount = commentCount;
+		this.ratingCount = ratingCount;
+		this.rating = rating;
+	}
 
-    public Model(
-            Long modelId, String name, String type, Long modelVersionId, String modelUrl, String nsfw, Integer status, String description, LocalDateTime createDate, String aliUrl, String aliPwd, Integer downloadCount, Integer favoriteCount, Integer commentCount, Integer ratingCount, String rating) {
-        this.modelId = modelId;
-        this.name = name;
-        this.type = type;
-        this.modelVersionId = modelVersionId;
-        this.modelUrl = modelUrl;
-        this.nsfw = nsfw;
-        this.status = status;
-        this.description = description;
-        this.createDate = createDate;
-        this.aliUrl = aliUrl;
-        this.aliPwd = aliPwd;
-        this.downloadCount = downloadCount;
-        this.favoriteCount = favoriteCount;
-        this.commentCount = commentCount;
-        this.ratingCount = ratingCount;
-        this.rating = rating;
-    }
+	@Id
+	@GeneratedValue(strategy = IDENTITY)
+	@Column(name = "id")
+	public Long getId() {
+		return id;
+	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "id")
-    public Long getId() {
-        return id;
-    }
+	@Column(name = "model_id")
+	public Long getModelId() {
+		return modelId;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setModelId(Long modelId) {
+		this.modelId = modelId;
+	}
 
+	/**
+	 * @return 模型名字
+	 */
+	@Column(name = "name")
+	public String getName() {
+		return name;
+	}
 
-    @Column(name = "model_id")
-    public Long getModelId() {
-        return modelId;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setModelId(Long modelId) {
-        this.modelId = modelId;
-    }
+	/**
+	 * @return 类型
+	 */
+	@Column(name = "type")
+	public String getType() {
+		return type;
+	}
 
+	public void setType(String type) {
+		this.type = type;
+	}
 
-    /**
-     * @return 模型名字
-     */
-    @Column(name = "name")
-    public String getName() {
-        return name;
-    }
+	@Column(name = "model_version_id")
+	public Long getModelVersionId() {
+		return modelVersionId;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setModelVersionId(Long modelVersionId) {
+		this.modelVersionId = modelVersionId;
+	}
 
+	@Column(name = "model_url")
+	public String getModelUrl() {
+		return modelUrl;
+	}
 
-    /**
-     * @return 类型
-     */
-    @Column(name = "type")
-    public String getType() {
-        return type;
-    }
+	public void setModelUrl(String modelUrl) {
+		this.modelUrl = modelUrl;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	/**
+	 * @return nsfw
+	 */
+	@Column(name = "nsfw")
+	public String getNsfw() {
+		return nsfw;
+	}
 
+	public void setNsfw(String nsfw) {
+		this.nsfw = nsfw;
+	}
 
-    @Column(name = "model_version_id")
-    public Long getModelVersionId() {
-        return modelVersionId;
-    }
+	/**
+	 * @return 任务是否启动, 默认未启动 default : 1
+	 */
+	@Column(name = "status")
+	public Integer getStatus() {
+		return status;
+	}
 
-    public void setModelVersionId(Long modelVersionId) {
-        this.modelVersionId = modelVersionId;
-    }
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
 
+	@Column(name = "description")
+	public String getDescription() {
+		return description;
+	}
 
-    @Column(name = "model_url")
-    public String getModelUrl() {
-        return modelUrl;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setModelUrl(String modelUrl) {
-        this.modelUrl = modelUrl;
-    }
+	@Column(name = "create_date")
+	public LocalDateTime getCreateDate() {
+		return createDate;
+	}
 
+	public void setCreateDate(LocalDateTime createDate) {
+		this.createDate = createDate;
+	}
 
-    /**
-     * @return nsfw
-     */
-    @Column(name = "nsfw")
-    public String getNsfw() {
-        return nsfw;
-    }
+	@Column(name = "ali_url")
+	public String getAliUrl() {
+		return aliUrl;
+	}
 
-    public void setNsfw(String nsfw) {
-        this.nsfw = nsfw;
-    }
+	public void setAliUrl(String aliUrl) {
+		this.aliUrl = aliUrl;
+	}
 
+	@Column(name = "ali_pwd")
+	public String getAliPwd() {
+		return aliPwd;
+	}
 
-    /**
-     * @return 任务是否启动, 默认未启动 default : 1
-     */
-    @Column(name = "status")
-    public Integer getStatus() {
-        return status;
-    }
+	public void setAliPwd(String aliPwd) {
+		this.aliPwd = aliPwd;
+	}
 
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
+	/**
+	 * @return 下载量 default : 0
+	 */
+	@Column(name = "downloadCount")
+	public Integer getDownloadCount() {
+		return downloadCount;
+	}
 
+	public void setDownloadCount(Integer downloadCount) {
+		this.downloadCount = downloadCount;
+	}
 
-    @Column(name = "description")
-    public String getDescription() {
-        return description;
-    }
+	@Column(name = "favoriteCount")
+	public Integer getFavoriteCount() {
+		return favoriteCount;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setFavoriteCount(Integer favoriteCount) {
+		this.favoriteCount = favoriteCount;
+	}
 
+	@Column(name = "commentCount")
+	public Integer getCommentCount() {
+		return commentCount;
+	}
 
-    @Column(name = "create_date")
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
+	public void setCommentCount(Integer commentCount) {
+		this.commentCount = commentCount;
+	}
 
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
-    }
+	@Column(name = "ratingCount")
+	public Integer getRatingCount() {
+		return ratingCount;
+	}
 
+	public void setRatingCount(Integer ratingCount) {
+		this.ratingCount = ratingCount;
+	}
 
-    @Column(name = "ali_url")
-    public String getAliUrl() {
-        return aliUrl;
-    }
+	@Column(name = "rating")
+	public String getRating() {
+		return rating;
+	}
 
-    public void setAliUrl(String aliUrl) {
-        this.aliUrl = aliUrl;
-    }
-
-
-    @Column(name = "ali_pwd")
-    public String getAliPwd() {
-        return aliPwd;
-    }
-
-    public void setAliPwd(String aliPwd) {
-        this.aliPwd = aliPwd;
-    }
-
-
-    /**
-     * @return 下载量 default : 0
-     */
-    @Column(name = "downloadCount")
-    public Integer getDownloadCount() {
-        return downloadCount;
-    }
-
-    public void setDownloadCount(Integer downloadCount) {
-        this.downloadCount = downloadCount;
-    }
-
-
-    @Column(name = "favoriteCount")
-    public Integer getFavoriteCount() {
-        return favoriteCount;
-    }
-
-    public void setFavoriteCount(Integer favoriteCount) {
-        this.favoriteCount = favoriteCount;
-    }
-
-
-    @Column(name = "commentCount")
-    public Integer getCommentCount() {
-        return commentCount;
-    }
-
-    public void setCommentCount(Integer commentCount) {
-        this.commentCount = commentCount;
-    }
-
-
-    @Column(name = "ratingCount")
-    public Integer getRatingCount() {
-        return ratingCount;
-    }
-
-    public void setRatingCount(Integer ratingCount) {
-        this.ratingCount = ratingCount;
-    }
-
-
-    @Column(name = "rating")
-    public String getRating() {
-        return rating;
-    }
-
-    public void setRating(String rating) {
-        this.rating = rating;
-    }
+	public void setRating(String rating) {
+		this.rating = rating;
+	}
 
 }

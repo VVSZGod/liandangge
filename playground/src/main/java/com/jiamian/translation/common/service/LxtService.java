@@ -39,8 +39,7 @@ public class LxtService {
 		map.put("param",
 				shortMessage.getMobileNo() + "|" + shortMessage.getContent());
 		map.put("sign", getMD5String(sign));
-		JSONObject result = OkHttpUtil.post(lxtConfig.getBASE_URL(),
-				map);
+		JSONObject result = OkHttpUtil.post(lxtConfig.getBASE_URL(), map);
 		log.info("短信发送结果==={}", result);
 		String code = result.get("code").toString();
 		return code.equals("0");

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 import com.jiamian.translation.common.entity.Page;
+import com.jiamian.translation.common.enums.SortTypeEnum;
 import com.jiamian.translation.common.enums.YesOrNo;
 import com.jiamian.translation.common.exception.BOException;
 import com.jiamian.translation.dao.redis.ModelRedisService;
@@ -40,6 +41,21 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+
+import javax.persistence.criteria.Predicate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName: ModeServiceImpl
@@ -56,21 +72,29 @@ public class ModeServiceImpl {
 	@Autowired
 	private MetaRepository metaRepository;
 
-	@Autowired
-	private ModelRepository modelRepository;
+    @Autowired
+    private ModelRepository modelRepository;
 
-	@Autowired
-	private ModelRedisService modelRedisService;
-	@Autowired
-	private ModelCreatorRepository modelCreatorRepository;
+    @Autowired
+    private ModelRedisService modelRedisService;
+    @Autowired
+    private ModelCreatorRepository modelCreatorRepository;
+
 	@Autowired
 	private ModelTagsRepository modelTagsRepository;
 
 	public Page<ModelResponse> pageModel(Integer pageNo, Integer pageSize,
-			String key) {
+			String key, String type, Integer sortType) {
+		String[] desc = new String[] { "downloadCount", "modelId" };
+		if (SortTypeEnum.DOWN_COUNT.value().equals(sortType)) {
 
+		} else if (SortTypeEnum.TIME.value().equals(sortType)) {
+			desc = new String[] { "createDate", "downloadCount" };
+		} else {
+			desc = new String[] { "rating", "downloadCount" };
+		}
 		PageRequest pageRequest = PageRequest.of(pageNo, pageSize,
-				Sort.Direction.DESC, "downloadCount", "modelId");
+				Sort.Direction.DESC, desc);
 		Specification<Model> specification = (Specification<Model>) (root,
 				criteriaQuery, cb) -> {
 			List<Predicate> predicates = Lists.newArrayList();
@@ -85,6 +109,9 @@ public class ModeServiceImpl {
 					log.info("message{}===id{}", e.getMessage(), key);
 				}
 				predicates.add(cb.or(predicatesOr.toArray(new Predicate[] {})));
+			}
+			if (StringUtils.isNotEmpty(type)) {
+				predicates.add(cb.equal(root.get("type"), type));
 			}
 			return cb.and(predicates.toArray(new Predicate[] {}));
 		};
