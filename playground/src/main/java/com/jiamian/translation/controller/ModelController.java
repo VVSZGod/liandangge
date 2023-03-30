@@ -71,7 +71,7 @@ public class ModelController {
     }
 
     @GetMapping("/url")
-    @ApiOperation("模型链接下载")
+    @ApiOperation("模型链接下载11")
     public JsonResult<Map<String, String>> getModelUrl(
             @LoginUser Long userId,
             @RequestParam(value = "modelId") Integer modelId) {
