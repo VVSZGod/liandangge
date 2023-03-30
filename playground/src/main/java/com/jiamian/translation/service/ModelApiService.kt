@@ -148,7 +148,6 @@ class ModelApiService {
     }
 
     companion object {
-        private const val MODELS_JSON_FILE_NAME = "%s_models.json"
         private const val MODEL_DETAIL_URL = "https://models.paomiantv.cn/models/Detail?id=%s"
     }
 }
