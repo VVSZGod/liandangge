@@ -150,6 +150,40 @@
             </build>
         </profile>
 
+
+        <profile>
+            <id>qa</id>
+            <properties>
+                <package.environment>qa</package.environment>
+            </properties>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources/${package.environment}</directory>
+                        <includes>
+                            <include>**/*.properties</include>
+                            <include>**/*.xml</include>
+                            <include>**/*.yml</include>
+                        </includes>
+                        <targetPath>${project.build.directory}/classes</targetPath>
+                        <filtering>false</filtering>
+                    </resource>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <includes>
+                            <include>**/*.xml</include>
+                        </includes>
+                        <filtering>false</filtering>
+                    </resource>
+                    <resource>
+                        <directory>src/main/resources/static</directory>
+                        <targetPath>${project.build.directory}/classes</targetPath>
+                        <filtering>false</filtering>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+
         <profile>
             <id>muti</id>
             <properties>
