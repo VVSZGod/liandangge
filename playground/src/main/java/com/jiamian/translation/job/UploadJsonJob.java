@@ -19,7 +19,7 @@ public class UploadJsonJob {
 	@Scheduled(cron = "0 0 23 * * ?")
 	public void uploadJsonJob(){
 		log.info("=== uploadJson start ====");
-		modelApiService.uploadQiniuModelsJson();
+//		modelApiService.uploadQiniuModelsJson();
 		log.info("=== uploadJson end ====");
 	}
 }
