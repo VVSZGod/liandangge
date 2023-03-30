@@ -12,8 +12,8 @@ import java.util.Optional;
  * @date 2023/2/13
  */
 @Repository
-public interface UserInfoRepository extends JpaRepository<Users, Long>,
-		JpaSpecificationExecutor<Users> {
+public interface UserInfoRepository
+		extends JpaRepository<Users, Long>, JpaSpecificationExecutor<Users> {
 
 	Optional<Users> findByUserId(Long aLong);
 

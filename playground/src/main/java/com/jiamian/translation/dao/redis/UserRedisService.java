@@ -15,21 +15,21 @@ import java.util.stream.Collectors;
 
 @Component
 public class UserRedisService {
-    private static Logger logger = LoggerFactory
-            .getLogger(UserRedisService.class);
+	private static Logger logger = LoggerFactory
+			.getLogger(UserRedisService.class);
 
-    @Autowired
-    private RedisTemplate redisTemplate;
-    @Autowired
-    private RedisDao redisDao;
+	@Autowired
+	private RedisTemplate redisTemplate;
+	@Autowired
+	private RedisDao redisDao;
 
-    /**
-     * 返回自增用户id
-     *
-     * @return
-     */
-    public Long incrUserId() {
-        return redisTemplate.opsForValue()
-                .increment(RedisCacheKey.TRANSLATION_USER_INCR_KEY, 1);
-    }
+	/**
+	 * 返回自增用户id
+	 *
+	 * @return
+	 */
+	public Long incrUserId() {
+		return redisTemplate.opsForValue()
+				.increment(RedisCacheKey.TRANSLATION_USER_INCR_KEY, 1);
+	}
 }

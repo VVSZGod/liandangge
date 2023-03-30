@@ -33,52 +33,53 @@ import java.util.Map;
 @Api(tags = "模型")
 public class ModelController {
 
-    @Autowired
-    private ModeServiceImpl modeService;
+	@Autowired
+	private ModeServiceImpl modeService;
 
-    @Autowired
-    private ModelTypeServiceImpl modelTypeService;
+	@Autowired
+	private ModelTypeServiceImpl modelTypeService;
 
-    @GetMapping("/list")
-    @ApiOperation("模型列表")
-    public JsonResult<Page<ModelResponse>> modelList(
-            @RequestParam(value = "pageNo", defaultValue = "0") @ApiParam("默认从0开始") Integer pageNo,
-            @RequestParam(value = "pageSize") Integer pageSize,
-            @RequestParam(value = "key", required = false) String key,
-            @RequestParam(value = "type", required = false) String type,
-            @RequestParam(value = "sortType", defaultValue = "1") Integer sortType) {
-        Page<ModelResponse> modelResponsePage = modeService.pageModel(pageNo, pageSize, key, type,sortType);
-        return JsonResult.succResult(modelResponsePage);
-    }
+	@GetMapping("/list")
+	@ApiOperation("模型列表")
+	public JsonResult<Page<ModelResponse>> modelList(
+			@RequestParam(value = "pageNo", defaultValue = "0") @ApiParam("默认从0开始") Integer pageNo,
+			@RequestParam(value = "pageSize") Integer pageSize,
+			@RequestParam(value = "key", required = false) String key,
+			@RequestParam(value = "type", required = false) String type,
+			@RequestParam(value = "sortType", defaultValue = "1") Integer sortType) {
+		Page<ModelResponse> modelResponsePage = modeService.pageModel(pageNo,
+				pageSize, key, type, sortType);
+		return JsonResult.succResult(modelResponsePage);
+	}
 
-    @GetMapping("/detail")
-    @ApiOperation("模型详情")
-    public JsonResult<ModelDetailResponse> modelDetail(
-            @LoginUser Long userId,
-            @RequestParam(value = "modelId") Integer modelId) {
-        ModelDetailResponse modelDetailResponse = modeService.modelDetail(userId, modelId.longValue());
-        return JsonResult.succResult(modelDetailResponse);
-    }
+	@GetMapping("/detail")
+	@ApiOperation("模型详情")
+	public JsonResult<ModelDetailResponse> modelDetail(@LoginUser Long userId,
+			@RequestParam(value = "modelId") Integer modelId) {
+		ModelDetailResponse modelDetailResponse = modeService
+				.modelDetail(userId, modelId.longValue());
+		return JsonResult.succResult(modelDetailResponse);
+	}
 
-    @GetMapping("/url")
-    @ApiOperation("模型链接下载")
-    public JsonResult<Map<String, String>> getModelUrl(
-            @LoginUser Long userId,
-            @RequestParam(value = "modelId") Integer modelId) {
-        UserTokenUtil.needLogin(userId);
-        return JsonResult.succResult(modeService.getModelUrl(modelId));
-    }
+	@GetMapping("/url")
+	@ApiOperation("模型链接下载")
+	public JsonResult<Map<String, String>> getModelUrl(@LoginUser Long userId,
+			@RequestParam(value = "modelId") Integer modelId) {
+		UserTokenUtil.needLogin(userId);
+		return JsonResult.succResult(modeService.getModelUrl(modelId));
+	}
 
-    @GetMapping("/count")
-    @ApiOperation("模型总数量和已经上传数量")
-    public JsonResult<Map<String, Integer>> getModelCount() {
-        return JsonResult.succResult(modeService.getModelCount());
-    }
+	@GetMapping("/count")
+	@ApiOperation("模型总数量和已经上传数量")
+	public JsonResult<Map<String, Integer>> getModelCount() {
+		return JsonResult.succResult(modeService.getModelCount());
+	}
 
-    @GetMapping("/type")
-    @ApiOperation("模型类型")
-    public JsonResult<List<ModelTypeResponse>> modelTypeResponseList() {
-        List<ModelTypeResponse> modelTypeResponses = modelTypeService.modelTypeResponseList();
-        return JsonResult.succResult(modelTypeResponses);
-    }
+	@GetMapping("/type")
+	@ApiOperation("模型类型")
+	public JsonResult<List<ModelTypeResponse>> modelTypeResponseList() {
+		List<ModelTypeResponse> modelTypeResponses = modelTypeService
+				.modelTypeResponseList();
+		return JsonResult.succResult(modelTypeResponses);
+	}
 }

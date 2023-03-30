@@ -11,6 +11,7 @@ import java.util.List;
  * @date 2023/3/29
  */
 @Repository
-public interface ModelCreatorRepository extends JpaRepository<ModelCreator,Long> {
+public interface ModelCreatorRepository
+		extends JpaRepository<ModelCreator, Long> {
 	List<ModelCreator> findByModelId(Long modelId);
 }

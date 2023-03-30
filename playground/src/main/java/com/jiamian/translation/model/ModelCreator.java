@@ -27,18 +27,15 @@ public class ModelCreator implements Serializable {
 	private Long modelId;
 	private String image;
 
-
 	public ModelCreator() {
 	}
 
-	public ModelCreator(
-			Long uid, String username, Long modelId, String image) {
+	public ModelCreator(Long uid, String username, Long modelId, String image) {
 		this.uid = uid;
 		this.username = username;
 		this.modelId = modelId;
 		this.image = image;
 	}
-
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -51,7 +48,6 @@ public class ModelCreator implements Serializable {
 		this.id = id;
 	}
 
-
 	@Column(name = "uid")
 	public Long getUid() {
 		return uid;
@@ -60,7 +56,6 @@ public class ModelCreator implements Serializable {
 	public void setUid(Long uid) {
 		this.uid = uid;
 	}
-
 
 	/**
 	 * @return 用户名
@@ -74,7 +69,6 @@ public class ModelCreator implements Serializable {
 		this.username = username;
 	}
 
-
 	/**
 	 * @return 模型ID
 	 */
@@ -86,7 +80,6 @@ public class ModelCreator implements Serializable {
 	public void setModelId(Long modelId) {
 		this.modelId = modelId;
 	}
-
 
 	/**
 	 * @return 用户头像
