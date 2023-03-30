@@ -1,8 +1,24 @@
 package com.jiamian.translation.service;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.ObjectUtil;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import javax.persistence.criteria.Predicate;
+
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+
 import com.google.common.collect.Lists;
 import com.jiamian.translation.common.entity.Page;
 import com.jiamian.translation.common.enums.SortTypeEnum;
@@ -12,12 +28,18 @@ import com.jiamian.translation.dao.redis.ModelRedisService;
 import com.jiamian.translation.dao.repository.MetaRepository;
 import com.jiamian.translation.dao.repository.ModelCreatorRepository;
 import com.jiamian.translation.dao.repository.ModelRepository;
+import com.jiamian.translation.dao.repository.ModelTagsRepository;
 import com.jiamian.translation.entity.dto.MetaDTO;
 import com.jiamian.translation.entity.response.ModelDetailResponse;
 import com.jiamian.translation.entity.response.ModelResponse;
 import com.jiamian.translation.model.Meta;
 import com.jiamian.translation.model.Model;
 import com.jiamian.translation.model.ModelCreator;
+import com.jiamian.translation.model.ModelTags;
+
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -46,17 +68,17 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ModeServiceImpl {
 
+	private static final String C_CREATOR_LINK = "https://civitai.com/user/%s";
 	@Autowired
 	private MetaRepository metaRepository;
 
-	@Autowired
-	private ModelRepository modelRepository;
+    @Autowired
+    private ModelRepository modelRepository;
 
-	@Autowired
-	private ModelRedisService modelRedisService;
-
-	@Autowired
-	private ModelCreatorRepository modelCreatorRepository;
+    @Autowired
+    private ModelRedisService modelRedisService;
+    @Autowired
+    private ModelCreatorRepository modelCreatorRepository;
 
 	public Page<ModelResponse> pageModel(Integer pageNo, Integer pageSize,
 			String key, String type, Integer sortType) {
@@ -146,6 +168,27 @@ public class ModeServiceImpl {
 				String headThumb = modelCreators.get(0).getImage();
 				modelDetailResponse.setCreatorUserName(username);
 				modelDetailResponse.setCreatorHeadThumb(headThumb);
+				modelDetailResponse.setCreatorLink(
+						String.format(C_CREATOR_LINK, username));
+			}
+			List<ModelTags> modelTags = modelTagsRepository
+					.findByModelId(modelId);
+			if (CollectionUtil.isNotEmpty(modelTags)) {
+				ModelTags modelTag = modelTags.get(0);
+				String baseModel = modelTag.getBaseModel();
+				String trainedWords = ObjectUtils.isNotEmpty(
+						modelTag.getTrainedWords()) ? modelTag.getTrainedWords()
+								: "";
+				String tagText = ObjectUtils.isNotEmpty(modelTag.getTagText())
+						? modelTag.getTagText()
+						: "";
+
+				modelDetailResponse.setTrainedWords(
+						Arrays.asList(trainedWords.trim().split(",")));
+				modelDetailResponse
+						.setTags(Arrays.asList(tagText.trim().split(",")));
+				modelDetailResponse.setBaseModel(baseModel);
+
 			}
 
 			modelDetailResponse.setMetaDTOList(metaDTOList);

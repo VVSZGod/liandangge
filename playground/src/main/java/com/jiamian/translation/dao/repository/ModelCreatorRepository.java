@@ -1,10 +1,11 @@
 package com.jiamian.translation.dao.repository;
 
-import com.jiamian.translation.model.ModelCreator;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.jiamian.translation.model.ModelCreator;
 
 /**
  * @author DingGuangHui

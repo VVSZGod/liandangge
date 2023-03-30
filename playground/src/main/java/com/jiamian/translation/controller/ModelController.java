@@ -1,5 +1,13 @@
 package com.jiamian.translation.controller;
 
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.jiamian.translation.annotation.LoginUser;
 import com.jiamian.translation.common.entity.JsonResult;
 import com.jiamian.translation.common.entity.Page;
@@ -9,6 +17,7 @@ import com.jiamian.translation.entity.response.ModelTypeResponse;
 import com.jiamian.translation.service.ModeServiceImpl;
 import com.jiamian.translation.service.ModelTypeServiceImpl;
 import com.jiamian.translation.util.UserTokenUtil;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -33,8 +42,8 @@ import java.util.Map;
 @Api(tags = "模型")
 public class ModelController {
 
-	@Autowired
-	private ModeServiceImpl modeService;
+    @Autowired
+    private ModeServiceImpl modeService;
 
 	@Autowired
 	private ModelTypeServiceImpl modelTypeService;
@@ -52,22 +61,23 @@ public class ModelController {
 		return JsonResult.succResult(modelResponsePage);
 	}
 
-	@GetMapping("/detail")
-	@ApiOperation("模型详情")
-	public JsonResult<ModelDetailResponse> modelDetail(@LoginUser Long userId,
-			@RequestParam(value = "modelId") Integer modelId) {
-		ModelDetailResponse modelDetailResponse = modeService
-				.modelDetail(userId, modelId.longValue());
-		return JsonResult.succResult(modelDetailResponse);
-	}
+    @GetMapping("/detail")
+    @ApiOperation("模型详情")
+    public JsonResult<ModelDetailResponse> modelDetail(
+            @LoginUser Long userId,
+            @RequestParam(value = "modelId") Integer modelId) {
+        ModelDetailResponse modelDetailResponse = modeService.modelDetail(userId, modelId.longValue());
+        return JsonResult.succResult(modelDetailResponse);
+    }
 
-	@GetMapping("/url")
-	@ApiOperation("模型链接下载")
-	public JsonResult<Map<String, String>> getModelUrl(@LoginUser Long userId,
-			@RequestParam(value = "modelId") Integer modelId) {
-		UserTokenUtil.needLogin(userId);
-		return JsonResult.succResult(modeService.getModelUrl(modelId));
-	}
+    @GetMapping("/url")
+    @ApiOperation("模型链接下载")
+    public JsonResult<Map<String, String>> getModelUrl(
+            @LoginUser Long userId,
+            @RequestParam(value = "modelId") Integer modelId) {
+        UserTokenUtil.needLogin(userId);
+        return JsonResult.succResult(modeService.getModelUrl(modelId));
+    }
 
 	@GetMapping("/count")
 	@ApiOperation("模型总数量和已经上传数量")
