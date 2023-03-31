@@ -25,6 +25,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/khttp/khttp -->
+        <dependency>
+            <groupId>khttp</groupId>
+            <artifactId>khttp</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <!-- SpringBoot Web容器 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -177,22 +184,22 @@
             <version>3.8.0</version>
         </dependency>
         <!-- 序列化 -->
-<!--        <dependency>-->
-<!--            <groupId>com.fasterxml.jackson.core</groupId>-->
-<!--            <artifactId>jackson-databind</artifactId>-->
-<!--            <version>2.9.3</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.fasterxml.jackson.datatype</groupId>-->
-<!--            <artifactId>jackson-datatype-jsr310</artifactId>-->
-<!--            <version>2.11.1</version>-->
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <artifactId>jackson-databind</artifactId>-->
-<!--                    <groupId>com.fasterxml.jackson.core</groupId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.fasterxml.jackson.core</groupId>-->
+        <!--            <artifactId>jackson-databind</artifactId>-->
+        <!--            <version>2.9.3</version>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.fasterxml.jackson.datatype</groupId>-->
+        <!--            <artifactId>jackson-datatype-jsr310</artifactId>-->
+        <!--            <version>2.11.1</version>-->
+        <!--            <exclusions>-->
+        <!--                <exclusion>-->
+        <!--                    <artifactId>jackson-databind</artifactId>-->
+        <!--                    <groupId>com.fasterxml.jackson.core</groupId>-->
+        <!--                </exclusion>-->
+        <!--            </exclusions>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
