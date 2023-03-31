@@ -49,7 +49,7 @@ public class AESUtils {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(encrypt("15601747516"));
+		System.out.println(encrypt(""));
 		//decrypt("==");
 	}
 	/**

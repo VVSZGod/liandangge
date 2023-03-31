@@ -11,35 +11,13 @@ import lombok.Data;
 @ApiModel("登录参数模型")
 public class LoginRequest {
 
+	private String verificationCode;
 
-    private String verificationCode;
+	private String phoneNumber;
 
-    private String phoneNumber;
+	private String phoneAreaCode;
 
-    private String phoneAreaCode;
+	private String passWd;
 
-
-    public String getVerificationCode() {
-        return verificationCode;
-    }
-
-    public void setVerificationCode(String verificationCode) {
-        this.verificationCode = verificationCode;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getPhoneAreaCode() {
-        return phoneAreaCode;
-    }
-
-    public void setPhoneAreaCode(String phoneAreaCode) {
-        this.phoneAreaCode = phoneAreaCode;
-    }
+	private String newPassWd;
 }
