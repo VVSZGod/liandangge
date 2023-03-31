@@ -13,7 +13,6 @@ import sun.misc.BASE64Decoder;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
-
 /**
  * Description: AES加密解密方法
  */
@@ -30,7 +29,7 @@ public class AESUtils {
 	 */
 	public static String decrypt(String sSrc) {
 		try {
-			if(StringUtils.isEmpty(sSrc)){
+			if (StringUtils.isEmpty(sSrc)) {
 				return "";
 			}
 			byte[] raw = password.getBytes(charset);
@@ -40,7 +39,7 @@ public class AESUtils {
 			byte[] encrypted1 = (new BASE64Decoder()).decodeBuffer(sSrc);
 			byte[] original = cipher.doFinal(encrypted1);
 			String rs = new String(original, charset);
-			logger.info("[AES解密:输入{},输出{}]",sSrc,rs);
+			logger.info("[AES解密:输入{},输出{}]", sSrc, rs);
 			return rs;
 		} catch (Exception e) {
 			throw new BOException(ErrorMsg.ENCODE_ERROR);
@@ -50,13 +49,14 @@ public class AESUtils {
 
 	public static void main(String[] args) {
 		System.out.println(encrypt(""));
-		//decrypt("==");
+		// decrypt("==");
 	}
+
 	/**
 	 * AES加密字符串
 	 *
-	 * @param content 需要被加密的字符串
-	 *                加密需要的密码
+	 * @param content
+	 *            需要被加密的字符串 加密需要的密码
 	 * @return 密文
 	 */
 	public static String encrypt(String content) {
@@ -66,10 +66,9 @@ public class AESUtils {
 						"AES");
 				Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
 				cipher.init(Cipher.ENCRYPT_MODE, aes);
-				//将加密并编码后的内容解码成字节数组
-				String rs = Base64
-						.encode(cipher.doFinal(content.getBytes()));
-				logger.info("[AES加密:输入{},输出{}]",content,rs);
+				// 将加密并编码后的内容解码成字节数组
+				String rs = Base64.encode(cipher.doFinal(content.getBytes()));
+				logger.info("[AES加密:输入{},输出{}]", content, rs);
 				return rs;
 
 			} catch (Exception e) {

@@ -227,6 +227,9 @@ public class UserServiceImpl {
 				.findByPhoneNumber(phoneNumber);
 		if (optionalUsers.isPresent()) {
 			Users users = optionalUsers.get();
+			if (users.getPassWord().isEmpty()) {
+				throw new BOException("密码为空，请重新走注册流程");
+			}
 			if (!users.getPassWord().equals(passWord)) {
 				throw new BOException(ErrorMsg.EMAIL_OR_PASSWD_ERROR);
 			}
@@ -258,7 +261,8 @@ public class UserServiceImpl {
 	// }
 
 	private void checkPassWord(String newPasswd, String replyNewPasswd) {
-		if (AESUtils.decrypt(newPasswd).length() < 6) {
+		String decrypt = AESUtils.decrypt(newPasswd);
+		if (decrypt.length() < 6 || decrypt.length() > 20) {
 			throw new BOException(ErrorMsg.PASS_WORD_SHORT_ERROR);
 		}
 		if (!newPasswd.equals(replyNewPasswd)) {
