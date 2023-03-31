@@ -40,7 +40,7 @@ public class UserServiceImpl {
 	private static final Logger logger = LoggerFactory
 			.getLogger(UserServiceImpl.class);
 
-	@Value("${chuanglan.register_code_expire:300}")
+	@Value("${lxt.register_code_expire:300}")
 	private String REGISTER_CODER_EXPIRE;
 
 	@Value("${translation.user.avatar.url}")
@@ -72,6 +72,7 @@ public class UserServiceImpl {
 	public LoginUserResponse register(String phoneNumber, String phoneAreaCode,
 			String verificationCode, String passWd, String newPassWd) {
 		LoginUserResponse loginUserResponse = new LoginUserResponse();
+		loginUserResponse.setRegisterStat(false);
 		this.checkPassWord(passWd, newPassWd);
 		String decryptPhoneNumber = AESUtils.decrypt(phoneNumber);
 		// 验证短信验证码
@@ -90,6 +91,7 @@ public class UserServiceImpl {
 			appUserInfo.setUserName("model_" + nickName);
 			appUserInfo.setGender(0);
 			appUserInfo.setPassWord(passWd);
+			loginUserResponse.setRegisterStat(true);
 			return appUserInfo;
 		});
 		userInfo.setPassWord(passWd);
@@ -231,6 +233,7 @@ public class UserServiceImpl {
 			BeanUtil.copyProperties(users, loginUserResponse);
 			loginUserResponse.setToken(
 					UserTokenUtil.generateToken(loginUserResponse.getUserId()));
+			loginUserResponse.setRegisterStat(false);
 		} else {
 			throw new BOException(ErrorMsg.USER_NOT_FOUND_ERROR);
 		}
