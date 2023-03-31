@@ -1,34 +1,35 @@
 package com.jiamian.translation.model;
 
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-
 import javax.persistence.*;
 import java.io.Serializable;
-
 import static javax.persistence.GenerationType.IDENTITY;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import java.time.LocalDateTime;
 
 @Entity
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "model_type")
 public class ModelType implements Serializable {
-	public static final long serialVersionUID = 2745993280976952017L;
+	public static final long serialVersionUID = 5237201704989182216L;
 	private Integer id;
 	private String type;
 	private String showType;
 	private Integer status;
 	private Integer sortKey;
+	private Integer showStatus;
 
 	public ModelType() {
 	}
 
 	public ModelType(String type, String showType, Integer status,
-			Integer sortKey) {
+			Integer sortKey, Integer showStatus) {
 		this.type = type;
 		this.showType = showType;
 		this.status = status;
 		this.sortKey = sortKey;
+		this.showStatus = showStatus;
 	}
 
 	@Id
@@ -76,6 +77,15 @@ public class ModelType implements Serializable {
 
 	public void setSortKey(Integer sortKey) {
 		this.sortKey = sortKey;
+	}
+
+	@Column(name = "show_status")
+	public Integer getShowStatus() {
+		return showStatus;
+	}
+
+	public void setShowStatus(Integer showStatus) {
+		this.showStatus = showStatus;
 	}
 
 }

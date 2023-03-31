@@ -16,6 +16,7 @@ import java.util.List;
 public interface ModelTypeRepository extends JpaRepository<ModelType, Long>,
 		JpaSpecificationExecutor<ModelType> {
 
-	@Query(nativeQuery = true, value = "select * from model_type where status=1 order by sort_key desc ")
-	List<ModelType> selectModeTypeList();
+	@Query(nativeQuery = true, value = "select * from model_type where status=1 and " +
+            "show_status=:showStatus order by sort_key desc ")
+	List<ModelType> selectModeTypeList(Integer showStatus);
 }

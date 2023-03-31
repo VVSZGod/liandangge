@@ -8,8 +8,10 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 
+import com.jiamian.translation.entity.response.ModelTypeResponse;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -72,16 +74,19 @@ public class ModeServiceImpl {
 	@Autowired
 	private MetaRepository metaRepository;
 
-    @Autowired
-    private ModelRepository modelRepository;
+	@Autowired
+	private ModelRepository modelRepository;
 
-    @Autowired
-    private ModelRedisService modelRedisService;
-    @Autowired
-    private ModelCreatorRepository modelCreatorRepository;
+	@Autowired
+	private ModelRedisService modelRedisService;
+	@Autowired
+	private ModelCreatorRepository modelCreatorRepository;
 
 	@Autowired
 	private ModelTagsRepository modelTagsRepository;
+
+	@Autowired
+	private ModelTypeServiceImpl modelTypeService;
 
 	public Page<ModelResponse> pageModel(Integer pageNo, Integer pageSize,
 			String key, String type, Integer sortType) {
@@ -111,7 +116,18 @@ public class ModeServiceImpl {
 				predicates.add(cb.or(predicatesOr.toArray(new Predicate[] {})));
 			}
 			if (StringUtils.isNotEmpty(type)) {
-				predicates.add(cb.equal(root.get("type"), type));
+				if (type.equals("Other")) {
+					List<ModelTypeResponse> modelTypeResponses = modelTypeService
+							.notShowModelTypeResponseList();
+					CriteriaBuilder.In<Object> types = cb.in(root.get("type"));
+					types.value("Other");
+					for (ModelTypeResponse modelTypeResponse : modelTypeResponses) {
+						types.value(modelTypeResponse.getType());
+					}
+					predicates.add(types);
+				} else {
+					predicates.add(cb.equal(root.get("type"), type));
+				}
 			}
 			return cb.and(predicates.toArray(new Predicate[] {}));
 		};

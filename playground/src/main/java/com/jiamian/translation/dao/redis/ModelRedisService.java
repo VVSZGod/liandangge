@@ -51,13 +51,25 @@ public class ModelRedisService {
 
 	public void setModelType(String value) {
 		redisTemplate.opsForValue().set(RedisCacheKey.MODEL_TYPE_PREFIX, value);
-		redisTemplate.expire(RedisCacheKey.MODEL_TOTAL_UPLOADED_COUNT_PREFIX, 7,
+		redisTemplate.expire(RedisCacheKey.MODEL_TYPE_PREFIX, 7,
 				TimeUnit.DAYS);
 	}
 
 	public String getModelType() {
 		Object o = redisTemplate.opsForValue()
 				.get(RedisCacheKey.MODEL_TYPE_PREFIX);
+		return o == null ? "" : o.toString();
+	}
+
+	public void setNotShowModelType(String value) {
+		redisTemplate.opsForValue().set(RedisCacheKey.MODEL_TYPE_NOT_PREFIX, value);
+		redisTemplate.expire(RedisCacheKey.MODEL_TYPE_NOT_PREFIX, 7,
+				TimeUnit.DAYS);
+	}
+
+	public String getNotShowModelType() {
+		Object o = redisTemplate.opsForValue()
+				.get(RedisCacheKey.MODEL_TYPE_NOT_PREFIX);
 		return o == null ? "" : o.toString();
 	}
 }
