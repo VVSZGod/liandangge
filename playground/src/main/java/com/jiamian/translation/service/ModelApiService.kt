@@ -136,17 +136,6 @@ class ModelApiService {
         return ApiResp(item, MetaDataApiDTO(p.totalElements, pageIdx, pageSize, p.totalPages))
     }
 
-    inner class ApiResp {
-        var items: List<ModelApiDTO> = Lists.newArrayList()
-        var metadata: MetaDataApiDTO = MetaDataApiDTO(0, 0, 0, 0)
-
-        constructor() {}
-        constructor(items: List<ModelApiDTO>, metadata: MetaDataApiDTO) {
-            this.items = items
-            this.metadata = metadata
-        }
-    }
-
     companion object {
         //
         private const val MODEL_DETAIL_URL = "https://models.paomiantv.cn/models/Detail?id=%s"
