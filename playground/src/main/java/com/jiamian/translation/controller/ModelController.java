@@ -58,10 +58,12 @@ public class ModelController {
 			@RequestParam(value = "pageNo", defaultValue = "0") @ApiParam("默认从0开始") Integer pageNo,
 			@RequestParam(value = "pageSize") Integer pageSize,
 			@RequestParam(value = "key", required = false) String key,
-			@RequestParam(value = "type", required = false) String type,
-			@RequestParam(value = "sortType", defaultValue = "1") Integer sortType) {
+			@RequestParam(value = "type", required = false) @ApiParam("类型") String type,
+			@RequestParam(value = "sortType", defaultValue = "1") Integer sortType,
+			@LoginUser Long userId) {
+		userId = UserTokenUtil.createUserId(userId);
 		Page<ModelResponse> modelResponsePage = modeService.pageModel(pageNo,
-				pageSize, key, type, sortType);
+				pageSize, key, type, sortType,userId);
 		return JsonResult.succResult(modelResponsePage);
 	}
 
@@ -116,10 +118,11 @@ public class ModelController {
 			@RequestParam(value = "pageNo", defaultValue = "0") @ApiParam("默认从0开始") Integer pageNo,
 			@RequestParam(value = "pageSize") Integer pageSize,
 			@RequestParam(value = "key", required = false) String key,
-			@RequestParam(value = "type", required = false) String type,
-			@RequestParam(value = "sortType", defaultValue = "1") Integer sortType) {
-//		Page<ModelResponse> modelResponsePage = modeService.modelByTagList(pageNo,
-//				pageSize, key, type, sortType);
-		return JsonResult.succResult(null);
+			@RequestParam(value = "sortType", defaultValue = "1") Integer sortType,
+			@LoginUser Long userId) {
+		userId = UserTokenUtil.createUserId(userId);
+		Page<ModelResponse> modelResponsePage = modeService
+				.modelByTagList(pageNo, pageSize, key, sortType, userId);
+		return JsonResult.succResult(modelResponsePage);
 	}
 }

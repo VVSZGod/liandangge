@@ -1,7 +1,19 @@
 package com.jiamian.translation.service;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.RandomUtil;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.jiamian.translation.common.entity.dto.ShortMessage;
 import com.jiamian.translation.common.exception.BOException;
 import com.jiamian.translation.common.exception.ErrorMsg;
 import com.jiamian.translation.common.service.LxtService;
@@ -13,19 +25,10 @@ import com.jiamian.translation.model.Users;
 import com.jiamian.translation.redis.RedisDao;
 import com.jiamian.translation.util.AESUtils;
 import com.jiamian.translation.util.UserTokenUtil;
+
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.RandomUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import com.jiamian.translation.common.entity.dto.ShortMessage;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 /**
  * @ClassName: UserServiceImpl
@@ -95,6 +98,7 @@ public class UserServiceImpl {
 			return appUserInfo;
 		});
 		userInfo.setPassWord(passWd);
+		userInfo.setLastLoginTime(LocalDateTime.now());
 		userInfo = userInfoRepository.save(userInfo);
 		BeanUtil.copyProperties(userInfo, loginUserResponse);
 		loginUserResponse.setToken(
@@ -221,6 +225,7 @@ public class UserServiceImpl {
 	 * @param passWord
 	 * @return
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	public LoginUserResponse login(String phoneNumber, String passWord) {
 		LoginUserResponse loginUserResponse = new LoginUserResponse();
 		Optional<Users> optionalUsers = userInfoRepository
@@ -237,28 +242,14 @@ public class UserServiceImpl {
 			loginUserResponse.setToken(
 					UserTokenUtil.generateToken(loginUserResponse.getUserId()));
 			loginUserResponse.setRegisterStat(false);
+			users.setLastLoginTime(LocalDateTime.now());
+			userInfoRepository.save(users);
 		} else {
 			throw new BOException(ErrorMsg.USER_NOT_FOUND_ERROR);
 		}
 		return loginUserResponse;
 	}
 
-	// private void validParam(String userName, Integer gender, String
-	// avatarUrl) {
-	// MachineCheckResult userNameResult = YiDunApi.checkText(userName);
-	// if (MachineCheckResultEnum.PASS.getCode().intValue() != userNameResult
-	// .getRsEnum().getCode()) {
-	// throw new BOException(ErrorMsg.USER_INFO_EDIT_ERROR);
-	// }
-	// MachineCheckResult avatarUrlResult = YiDunApi.checkImage(avatarUrl);
-	// if (MachineCheckResultEnum.PASS.getCode().intValue() != avatarUrlResult
-	// .getRsEnum().getCode()) {
-	// throw new BOException(ErrorMsg.USER_INFO_EDIT_ERROR);
-	// }
-	// if (gender == null) {
-	// throw new BOException(ErrorMsg.USER_INFO_EDIT_ERROR);
-	// }
-	// }
 
 	private void checkPassWord(String newPasswd, String replyNewPasswd) {
 		String decrypt = AESUtils.decrypt(newPasswd);

@@ -26,4 +26,6 @@ public class ErrorMsg {
 	public static final String PASS_WORD_SHORT_ERROR = "密码长度大于6位小于20位";
 
 	public static final String REPLY_PASS_WORD_ERROR = "两次密码不一致";
+
+	public static final String MODEL_NOT_FOUND_ERROR = "模型不存在";
 }

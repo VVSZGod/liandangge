@@ -1,15 +1,17 @@
 package com.jiamian.translation.dao;
 
-import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.ObjectUtil;
-import com.alibaba.fastjson.JSONObject;
-import com.jiamian.translation.common.enums.SortTypeEnum;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.List;
 
+import org.springframework.stereotype.Component;
+
+import com.alibaba.fastjson.JSONObject;
+import com.jiamian.translation.common.enums.SortTypeEnum;
+
+@Component
 public class ModelServiceDao {
 
 	@PersistenceContext
@@ -24,24 +26,24 @@ public class ModelServiceDao {
 		StringBuilder sqlCount = new StringBuilder();
 		sql.append(
 				" select m.id,m.model_id,m.name,m.type,m.create_date,m.description,m.downloadCount,m.rating from  model m left join model_tags t on m.model_id=t.model_id"
-						+ "where LOWER(t.tagText) like '%")
+						+ " where m.status=1 and LOWER(t.tagText) like '%")
 				.append(tag).append("%' ");
 		sqlCount.append(
 				" select count(*) from  model m left join model_tags t on m.model_id=t.model_id"
-						+ "where LOWER(t.tagText) like '%")
+						+ " where m.status=1 and LOWER(t.tagText) like '%")
 				.append(tag).append("%' ");
 		if (SortTypeEnum.DOWN_COUNT.value().equals(sortType)) {
-			sql.append(" order by downloadCount,model_id desc");
+			sql.append(" order by (downloadCount+ldg_download_count) desc ,model_id desc");
 		} else if (SortTypeEnum.TIME.value().equals(sortType)) {
-			sql.append(" order by create_date,downloadCount desc");
+			sql.append(" order by create_date,model_id desc");
 		} else {
-			sql.append(" order by rating,downloadCount desc ");
+			sql.append(" order by rating,model_id desc ");
 		}
-		sql.append("limit ").append(pageNo).append(",").append("pageSize");
+		sql.append(" limit ").append(pageNo).append(",").append(pageSize);
 		Query query = entityManager.createNativeQuery(sql.toString());
 		List<Object[]> resultList = query.getResultList();
 		Query queryCount = entityManager.createNativeQuery(sqlCount.toString());
-		firstResult = queryCount.getFirstResult();
+		firstResult = Integer.parseInt(queryCount.getSingleResult().toString());
 		jsonObject.put("count", firstResult);
 		jsonObject.put("list", resultList);
 		return jsonObject;

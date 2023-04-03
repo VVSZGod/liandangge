@@ -31,4 +31,6 @@ public class RedisCacheKey {
 	 * 模型类型
 	 */
 	public static String MODEL_TYPE_NOT_PREFIX = "model:type:not:";
+
+	public static String USER_COLLECTION_MODEL_LIST_PREFIX = "model:user:collectionModelList:";
 }

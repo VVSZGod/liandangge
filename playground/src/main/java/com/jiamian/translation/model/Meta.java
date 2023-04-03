@@ -2,12 +2,9 @@ package com.jiamian.translation.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-
 import static javax.persistence.GenerationType.IDENTITY;
-
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,7 +12,7 @@ import java.time.LocalDateTime;
 @DynamicUpdate
 @Table(name = "meta")
 public class Meta implements Serializable {
-	public static final long serialVersionUID = 513674661390890692L;
+	public static final long serialVersionUID = 1590122400116897808L;
 	private Long id;
 	private Long modelId;
 	private Long modelVersionId;
@@ -29,6 +26,8 @@ public class Meta implements Serializable {
 	private String steps;
 	private String prompt;
 	private String negativePrompt;
+	private Integer width;
+	private Integer height;
 
 	public Meta() {
 	}
@@ -36,7 +35,7 @@ public class Meta implements Serializable {
 	public Meta(Long modelId, Long modelVersionId, Long imageid,
 			String imageUrl, String qiniuUrl, String modelName, String seed,
 			String sampler, String cfgScale, String steps, String prompt,
-			String negativePrompt) {
+			String negativePrompt, Integer width, Integer height) {
 		this.modelId = modelId;
 		this.modelVersionId = modelVersionId;
 		this.imageid = imageid;
@@ -49,6 +48,8 @@ public class Meta implements Serializable {
 		this.steps = steps;
 		this.prompt = prompt;
 		this.negativePrompt = negativePrompt;
+		this.width = width;
+		this.height = height;
 	}
 
 	@Id
@@ -168,6 +169,24 @@ public class Meta implements Serializable {
 
 	public void setNegativePrompt(String negativePrompt) {
 		this.negativePrompt = negativePrompt;
+	}
+
+	@Column(name = "width")
+	public Integer getWidth() {
+		return width;
+	}
+
+	public void setWidth(Integer width) {
+		this.width = width;
+	}
+
+	@Column(name = "height")
+	public Integer getHeight() {
+		return height;
+	}
+
+	public void setHeight(Integer height) {
+		this.height = height;
 	}
 
 }

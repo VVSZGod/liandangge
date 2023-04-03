@@ -1,6 +1,9 @@
 package com.jiamian.translation.entity.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 /**
  * @author DingGuangHui
@@ -13,4 +16,8 @@ public class UserInfoDTO {
 	private Integer gender;
 	private String phoneNumber;
 	private String avatarUrl;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	private LocalDateTime lastLoginTime;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	private LocalDateTime createTime;
 }

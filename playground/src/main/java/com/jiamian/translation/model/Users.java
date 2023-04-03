@@ -3,16 +3,12 @@ package com.jiamian.translation.model;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import javax.persistence.EntityListeners;
 import javax.persistence.*;
 import java.io.Serializable;
-
 import static javax.persistence.GenerationType.IDENTITY;
-
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,7 +17,7 @@ import java.time.LocalDateTime;
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
 public class Users implements Serializable {
-	public static final long serialVersionUID = 8024041674860627028L;
+	public static final long serialVersionUID = 8086651023115064606L;
 	private Long id;
 	private String userName;
 	private String passWord;
@@ -32,13 +28,15 @@ public class Users implements Serializable {
 	private LocalDateTime updateTime;
 	private Integer status;
 	private Long userId;
+	private LocalDateTime lastLoginTime;
 
 	public Users() {
 	}
 
 	public Users(String userName, String passWord, Integer gender,
 			String phoneNumber, String avatarUrl, LocalDateTime createTime,
-			LocalDateTime updateTime, Integer status, Long userId) {
+			LocalDateTime updateTime, Integer status, Long userId,
+			LocalDateTime lastLoginTime) {
 		this.userName = userName;
 		this.passWord = passWord;
 		this.gender = gender;
@@ -48,6 +46,7 @@ public class Users implements Serializable {
 		this.updateTime = updateTime;
 		this.status = status;
 		this.userId = userId;
+		this.lastLoginTime = lastLoginTime;
 	}
 
 	/**
@@ -154,6 +153,15 @@ public class Users implements Serializable {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	@Column(name = "last_login_time")
+	public LocalDateTime getLastLoginTime() {
+		return lastLoginTime;
+	}
+
+	public void setLastLoginTime(LocalDateTime lastLoginTime) {
+		this.lastLoginTime = lastLoginTime;
 	}
 
 }

@@ -2,12 +2,9 @@ package com.jiamian.translation.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-
 import static javax.persistence.GenerationType.IDENTITY;
-
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-
 import java.time.LocalDateTime;
 
 /**
@@ -18,7 +15,7 @@ import java.time.LocalDateTime;
 @DynamicUpdate
 @Table(name = "model")
 public class Model implements Serializable {
-	public static final long serialVersionUID = 2236194758442931453L;
+	public static final long serialVersionUID = 1709488915609700084L;
 	private Long id;
 	private Long modelId;
 	private String name;
@@ -36,6 +33,7 @@ public class Model implements Serializable {
 	private Integer commentCount;
 	private Integer ratingCount;
 	private String rating;
+	private Integer ldgDownloadCount;
 
 	public Model() {
 	}
@@ -44,7 +42,7 @@ public class Model implements Serializable {
 			String modelUrl, String nsfw, Integer status, String description,
 			LocalDateTime createDate, String aliUrl, String aliPwd,
 			Integer downloadCount, Integer favoriteCount, Integer commentCount,
-			Integer ratingCount, String rating) {
+			Integer ratingCount, String rating, Integer ldgDownloadCount) {
 		this.modelId = modelId;
 		this.name = name;
 		this.type = type;
@@ -61,6 +59,7 @@ public class Model implements Serializable {
 		this.commentCount = commentCount;
 		this.ratingCount = ratingCount;
 		this.rating = rating;
+		this.ldgDownloadCount = ldgDownloadCount;
 	}
 
 	@Id
@@ -138,7 +137,7 @@ public class Model implements Serializable {
 	}
 
 	/**
-	 * @return 任务是否启动, 默认未启动 default : 1
+	 * @return 任务是否启动,默认未启动 default : 1
 	 */
 	@Column(name = "status")
 	public Integer getStatus() {
@@ -231,6 +230,15 @@ public class Model implements Serializable {
 
 	public void setRating(String rating) {
 		this.rating = rating;
+	}
+
+	@Column(name = "ldg_download_count")
+	public Integer getLdgDownloadCount() {
+		return ldgDownloadCount;
+	}
+
+	public void setLdgDownloadCount(Integer ldgDownloadCount) {
+		this.ldgDownloadCount = ldgDownloadCount;
 	}
 
 }

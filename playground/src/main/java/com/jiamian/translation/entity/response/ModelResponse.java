@@ -1,5 +1,7 @@
 package com.jiamian.translation.entity.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -14,21 +16,38 @@ import java.time.LocalDateTime;
 @Data
 public class ModelResponse {
 
-    private Long id;
+	private Long id;
 
-    private Long modelId;
+	private Long modelId;
 
-    private String name;
+	private String name;
 
-    private String type;
+	private String type;
 
-    private LocalDateTime createDate;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	private LocalDateTime createDate;
 
-    private String imageUrl;
+	private String imageUrl;
 
-    private String description;
+	private String description;
 
-    private Integer downloadCount;
-    private String rating;
+	private Integer downloadCount;
+	private String rating;
+
+	@ApiModelProperty(value = "")
+	private String creatorUserName;
+	@ApiModelProperty(value = "")
+	private String creatorHeadThumb;
+	@ApiModelProperty(value = "")
+	private String creatorLink;
+
+	private boolean isCollectStat;
+
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	private LocalDateTime collectDate;
+
+	private Integer imageWidth;
+
+	private Integer imageHeight;
 
 }

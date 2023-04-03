@@ -20,6 +20,13 @@ public class UserTokenUtil {
 		return userId;
 	}
 
+	public static long createUserId(Long userId) {
+		if (userId == null || userId == 0) {
+			return 0L;
+		}
+		return userId;
+	}
+
 	public static String generateToken(Long id) {
 		return JwtHelper.createToken(id);
 	}

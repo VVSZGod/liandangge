@@ -49,4 +49,6 @@ public class ModelDetailResponse {
 	private List<String> trainedWords;
 	private String baseModel;
 
+	private boolean isCollectStat;
+
 }
