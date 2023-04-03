@@ -40,7 +40,7 @@ public class UserServiceImpl {
 	private static final Logger logger = LoggerFactory
 			.getLogger(UserServiceImpl.class);
 
-	@Value("${chuanglan.register_code_expire:300}")
+	@Value("${lxt.register_code_expire:300}")
 	private String REGISTER_CODER_EXPIRE;
 
 	@Value("${translation.user.avatar.url}")
@@ -69,9 +69,11 @@ public class UserServiceImpl {
 	 * @return
 	 */
 	@Transactional(rollbackFor = Exception.class)
-	public LoginUserResponse loginOrRegister(String phoneNumber,
-			String phoneAreaCode, String verificationCode, String ipAddr) {
+	public LoginUserResponse register(String phoneNumber, String phoneAreaCode,
+			String verificationCode, String passWd, String newPassWd) {
 		LoginUserResponse loginUserResponse = new LoginUserResponse();
+		loginUserResponse.setRegisterStat(false);
+		this.checkPassWord(passWd, newPassWd);
 		String decryptPhoneNumber = AESUtils.decrypt(phoneNumber);
 		// 验证短信验证码
 		this.validRegisterCode(phoneAreaCode, decryptPhoneNumber,
@@ -88,8 +90,11 @@ public class UserServiceImpl {
 			String nickName = RandomUtil.randomString(5);
 			appUserInfo.setUserName("model_" + nickName);
 			appUserInfo.setGender(0);
+			appUserInfo.setPassWord(passWd);
+			loginUserResponse.setRegisterStat(true);
 			return appUserInfo;
 		});
+		userInfo.setPassWord(passWd);
 		userInfo = userInfoRepository.save(userInfo);
 		BeanUtil.copyProperties(userInfo, loginUserResponse);
 		loginUserResponse.setToken(
@@ -209,6 +214,35 @@ public class UserServiceImpl {
 		}
 	}
 
+	/**
+	 * 登录
+	 *
+	 * @param phoneNumber
+	 * @param passWord
+	 * @return
+	 */
+	public LoginUserResponse login(String phoneNumber, String passWord) {
+		LoginUserResponse loginUserResponse = new LoginUserResponse();
+		Optional<Users> optionalUsers = userInfoRepository
+				.findByPhoneNumber(phoneNumber);
+		if (optionalUsers.isPresent()) {
+			Users users = optionalUsers.get();
+			if (users.getPassWord().isEmpty()) {
+				throw new BOException("密码为空，请重新走注册流程");
+			}
+			if (!users.getPassWord().equals(passWord)) {
+				throw new BOException(ErrorMsg.EMAIL_OR_PASSWD_ERROR);
+			}
+			BeanUtil.copyProperties(users, loginUserResponse);
+			loginUserResponse.setToken(
+					UserTokenUtil.generateToken(loginUserResponse.getUserId()));
+			loginUserResponse.setRegisterStat(false);
+		} else {
+			throw new BOException(ErrorMsg.USER_NOT_FOUND_ERROR);
+		}
+		return loginUserResponse;
+	}
+
 	// private void validParam(String userName, Integer gender, String
 	// avatarUrl) {
 	// MachineCheckResult userNameResult = YiDunApi.checkText(userName);
@@ -225,4 +259,15 @@ public class UserServiceImpl {
 	// throw new BOException(ErrorMsg.USER_INFO_EDIT_ERROR);
 	// }
 	// }
+
+	private void checkPassWord(String newPasswd, String replyNewPasswd) {
+		String decrypt = AESUtils.decrypt(newPasswd);
+		if (decrypt.length() < 6 || decrypt.length() > 20) {
+			throw new BOException(ErrorMsg.PASS_WORD_SHORT_ERROR);
+		}
+		if (!newPasswd.equals(replyNewPasswd)) {
+			throw new BOException(ErrorMsg.REPLY_PASS_WORD_ERROR);
+		}
+	}
+
 }

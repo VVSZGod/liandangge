@@ -1,7 +1,7 @@
 spring:
   redis:
     database: 10
-    host: 101.89.111.35
+    host: 101.201.252.242
     port: 6379
     timeout: 1000
     jedis:

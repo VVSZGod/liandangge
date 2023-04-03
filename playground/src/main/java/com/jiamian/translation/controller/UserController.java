@@ -29,54 +29,65 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "用户")
 public class UserController {
 
-    @Autowired
-    private UserServiceImpl userService;
+	@Autowired
+	private UserServiceImpl userService;
 
-    @Autowired
-    private HttpDao httpDao;
+	@Autowired
+	private HttpDao httpDao;
 
+	// /push/code 发送短信
+	@PostMapping("/push/code")
+	@ApiOperation("发送验证码")
+	public JsonResult getCode(@RequestParam("phoneNumber") String phoneNumber,
+			@RequestParam(value = "areaCode", defaultValue = "86") String areaCode) {
+		if (StringUtils.isEmpty(phoneNumber)) {
+			throw new BOException(ErrorMsg.PARAMETER_ERROR);
+		}
+		phoneNumber = AESUtils.decrypt(phoneNumber);
+		String ipAddr = httpDao.getIpAddr();
+		userService.getCode(phoneNumber, areaCode, ipAddr);
+		return JsonResult.succResult();
+	}
 
-    // /push/code 发送短信
-    @PostMapping("/push/code")
-    @ApiOperation("发送验证码")
-    public JsonResult getCode(@RequestParam("phoneNumber") String phoneNumber,
-                              @RequestParam(value = "areaCode", defaultValue = "86") String areaCode) {
-        if (StringUtils.isEmpty(phoneNumber)) {
-            throw new BOException(ErrorMsg.PARAMETER_ERROR);
-        }
-        phoneNumber = AESUtils.decrypt(phoneNumber);
-        String ipAddr = httpDao.getIpAddr();
-        userService.getCode(phoneNumber, areaCode, ipAddr);
-        return JsonResult.succResult();
-    }
+	/**
+	 * 注册/登录
+	 *
+	 * @return
+	 */
+	@PostMapping("/login")
+	@ApiOperation("登录")
+	public JsonResult<LoginUserResponse> login(
+			@RequestParam("phoneNumber") String phoneNumber,
+			@RequestParam("passWord") String passWord) {
+		LoginUserResponse loginUserResponse = userService.login(phoneNumber,
+				passWord);
+		return JsonResult.succResult(loginUserResponse);
+	}
 
-    /**
-     * 注册/登录
-     *
-     * @param loginRequest
-     * @return
-     */
-    @PostMapping("/login")
-    @ApiOperation("登录或注册")
-    public JsonResult<LoginUserResponse> loginOrRegister(
-            @RequestBody LoginRequest loginRequest) {
-        String ipAddr = httpDao.getIpAddr();
-        String verificationCode = loginRequest.getVerificationCode();
-        String phoneNumber = loginRequest.getPhoneNumber();
-        String phoneAreaCode = loginRequest.getPhoneAreaCode();
-        LoginUserResponse loginUserResponse = userService.loginOrRegister(
-                phoneNumber, phoneAreaCode, verificationCode, ipAddr);
-        return JsonResult.succResult(loginUserResponse);
-    }
+	@PostMapping("/register")
+	@ApiOperation("注册")
+	public JsonResult<LoginUserResponse> register(
+			@RequestBody LoginRequest loginRequest) {
+		String verificationCode = loginRequest.getVerificationCode();
+		String phoneNumber = loginRequest.getPhoneNumber();
+		String phoneAreaCode = loginRequest.getPhoneAreaCode();
+		String passWd = loginRequest.getPassWd();
+		String newPassWd = loginRequest.getNewPassWd();
+		LoginUserResponse loginUserResponse = userService.register(
+				phoneNumber, phoneAreaCode, verificationCode, passWd,
+				newPassWd);
+		return JsonResult.succResult(loginUserResponse);
+	}
 
-    // /info 查看用户信息
-    @GetMapping("/info")
-    @ApiOperation("用户信息")
-    public JsonResult<UserResponse> getUserInfoByUserId(@LoginUser Long userId) {
-        UserTokenUtil.needLogin(userId);
-        UserInfoDTO appUserInfoDTO = userService.getUserInfoByUserId(userId);
-        UserResponse userResponse = new UserResponse();
-        userResponse.setUserInfoDTO(appUserInfoDTO);
-        return JsonResult.succResult(userResponse);
-    }
+	// /info 查看用户信息
+	@GetMapping("/info")
+	@ApiOperation("用户信息")
+	public JsonResult<UserResponse> getUserInfoByUserId(
+			@LoginUser Long userId) {
+		UserTokenUtil.needLogin(userId);
+		UserInfoDTO appUserInfoDTO = userService.getUserInfoByUserId(userId);
+		UserResponse userResponse = new UserResponse();
+		userResponse.setUserInfoDTO(appUserInfoDTO);
+		return JsonResult.succResult(userResponse);
+	}
 }
