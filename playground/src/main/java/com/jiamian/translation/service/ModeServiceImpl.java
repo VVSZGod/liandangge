@@ -84,6 +84,8 @@ public class ModeServiceImpl {
 	@Autowired
 	private ModelServiceDao modelServiceDao;
 
+
+	@Transactional(rollbackFor = Exception.class)
 	public Page<ModelResponse> pageModel(Integer pageNo, Integer pageSize,
 			String key, String type, Integer sortType, Long userId) {
 		log.info("开始查询模型list======");
@@ -158,6 +160,7 @@ public class ModeServiceImpl {
 		return p;
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	public ModelDetailResponse modelDetail(Long userId, Long modelId) {
 		ModelDetailResponse modelDetailResponse = new ModelDetailResponse();
 		ModelResponse modelResponse = new ModelResponse();
@@ -166,16 +169,16 @@ public class ModeServiceImpl {
 		if (optionalModel.isPresent()) {
 			Model model = optionalModel.get();
 			BeanUtil.copyProperties(model, modelResponse);
-			setModelData(modelResponse, model.getAliUrl(), userId,
+			this.setModelData(modelResponse, model.getAliUrl(), userId,
 					model.getLdgDownloadCount());
 			BeanUtil.copyProperties(modelResponse, modelDetailResponse);
+			modelDetailResponse.setVersion(model.getVersion());
 			List<Meta> metaList = metaRepository.findByModelId(modelId);
 			List<MetaDTO> metaDTOList = metaList.stream().map(meta -> {
 				MetaDTO metaDTO = new MetaDTO();
 				BeanUtil.copyProperties(meta, metaDTO);
 				return metaDTO;
 			}).collect(Collectors.toList());
-			modelDetailResponse.setModelUrl("");
 			List<ModelTags> modelTags = modelTagsRepository
 					.findByModelId(modelId);
 			if (CollectionUtil.isNotEmpty(modelTags)) {
@@ -251,6 +254,7 @@ public class ModeServiceImpl {
 		return map;
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	public Page<ModelResponse> modelByTagList(Integer pageNo, Integer pageSize,
 			String key, Integer sortType, Long userId) {
 		com.jiamian.translation.common.entity.Page<ModelResponse> p = new com.jiamian.translation.common.entity.Page<>();
@@ -305,7 +309,7 @@ public class ModeServiceImpl {
 	/**
 	 * 处理 返回数据
 	 */
-	@Transactional(rollbackFor = Exception.class)
+
 	public void setModelData(ModelResponse modelResponse, String aliUrl,
 			Long userId, Integer ldgDownloadCount) {
 		Long modelId = modelResponse.getModelId();
@@ -374,6 +378,7 @@ public class ModeServiceImpl {
 		}
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	public Page<ModelResponse> userCollectionModelList(Integer pageNo,
 			Integer pageSize, Long userId) {
 		com.jiamian.translation.common.entity.Page<ModelResponse> p = new com.jiamian.translation.common.entity.Page<>();
