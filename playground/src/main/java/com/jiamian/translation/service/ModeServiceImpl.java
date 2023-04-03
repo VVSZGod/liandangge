@@ -86,6 +86,7 @@ public class ModeServiceImpl {
 
 	public Page<ModelResponse> pageModel(Integer pageNo, Integer pageSize,
 			String key, String type, Integer sortType, Long userId) {
+		log.info("开始查询模型list======");
 		PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
 		Specification<Model> specification = (Specification<Model>) (root,
 				criteriaQuery, cb) -> {
@@ -134,13 +135,16 @@ public class ModeServiceImpl {
 				.map(new Function<Model, ModelResponse>() {
 					@Override
 					public ModelResponse apply(Model model) {
+						log.info("处理模型基本数据--------");
 						ModelResponse modelResponse = new ModelResponse();
 						BeanUtils.copyProperties(model, modelResponse);
-						setModelData(modelResponse, model.getAliUrl(), userId);
+						setModelData(modelResponse, model.getAliUrl(), userId,
+								model.getLdgDownloadCount());
 						modelResponse
 								.setCreateDate(model.getCreateDate() == null
 										? LocalDateTime.of(2020, 2, 2, 2, 2)
 										: model.getCreateDate());
+						log.info("处理模型基本数据========");
 						return modelResponse;
 					}
 				});
@@ -150,6 +154,7 @@ public class ModeServiceImpl {
 		p.setPageSize(pageSize);
 		p.setTotalPages(rs.getTotalPages());
 		p.setTotalRecords((int) rs.getTotalElements());
+		log.info("结束查询模型list======");
 		return p;
 	}
 
@@ -161,7 +166,8 @@ public class ModeServiceImpl {
 		if (optionalModel.isPresent()) {
 			Model model = optionalModel.get();
 			BeanUtil.copyProperties(model, modelResponse);
-			setModelData(modelResponse, model.getAliUrl(), userId);
+			setModelData(modelResponse, model.getAliUrl(), userId,
+					model.getLdgDownloadCount());
 			BeanUtil.copyProperties(modelResponse, modelDetailResponse);
 			List<Meta> metaList = metaRepository.findByModelId(modelId);
 			List<MetaDTO> metaDTOList = metaList.stream().map(meta -> {
@@ -274,15 +280,17 @@ public class ModeServiceImpl {
 				String description = value[5].toString();
 				int downloadCount = Integer.parseInt(value[6].toString());
 				String rating = value[7].toString();
+				int ldgDownloadCount = Integer.parseInt(value[8].toString());
 				modelResponse.setId(id);
 				modelResponse.setModelId(modelId);
 				modelResponse.setName(modelName);
 				modelResponse.setCreateDate(createDate);
 				modelResponse.setDescription(description);
 				modelResponse.setType(type);
-				modelResponse.setDownloadCount(downloadCount);
+				modelResponse
+						.setDownloadCount(downloadCount + ldgDownloadCount);
 				modelResponse.setRating(rating);
-				this.setModelData(modelResponse, "", userId);
+				this.setModelData(modelResponse, "", userId, ldgDownloadCount);
 				listModel.add(modelResponse);
 			}
 		}
@@ -299,7 +307,7 @@ public class ModeServiceImpl {
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	public void setModelData(ModelResponse modelResponse, String aliUrl,
-			Long userId) {
+			Long userId, Integer ldgDownloadCount) {
 		Long modelId = modelResponse.getModelId();
 		Optional<Meta> optionalMeta = metaRepository
 				.selectModelByModelIdOne(modelId);
@@ -346,7 +354,8 @@ public class ModeServiceImpl {
 			modelResponse.setCollectStat(
 					modelRedisService.isCollectionModelUser(userId, modelId));
 		}
-
+		modelResponse.setDownloadCount(
+				modelResponse.getDownloadCount() + ldgDownloadCount);
 	}
 
 	public void userCollectionModel(Long userId, Long modelId) {
@@ -380,7 +389,7 @@ public class ModeServiceImpl {
 					.findByModelId(modelId);
 			BeanUtil.copyProperties(optionalModel.get(), modelResponse);
 			this.setModelData(modelResponse, optionalModel.get().getAliUrl(),
-					userId);
+					userId, optionalModel.get().getLdgDownloadCount());
 			modelResponse.setCollectDate(
 					DateUtil.getLocalDateTimeFromTimeStamp(score.longValue()));
 			modelResponse.setCollectStat(true);
