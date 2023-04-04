@@ -88,7 +88,6 @@ public class ModeServiceImpl {
 	@Transactional(rollbackFor = Exception.class)
 	public Page<ModelResponse> pageModel(Integer pageNo, Integer pageSize,
 			String key, String type, Integer sortType, Long userId) {
-		log.info("开始查询模型list======");
 		PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
 		Specification<Model> specification = (Specification<Model>) (root,
 				criteriaQuery, cb) -> {
@@ -137,7 +136,6 @@ public class ModeServiceImpl {
 				.map(new Function<Model, ModelResponse>() {
 					@Override
 					public ModelResponse apply(Model model) {
-						log.info("处理模型基本数据--------");
 						ModelResponse modelResponse = new ModelResponse();
 						BeanUtils.copyProperties(model, modelResponse);
 						setModelData(modelResponse, model.getAliUrl(), userId,
@@ -146,7 +144,6 @@ public class ModeServiceImpl {
 								.setCreateDate(model.getCreateDate() == null
 										? LocalDateTime.of(2020, 2, 2, 2, 2)
 										: model.getCreateDate());
-						log.info("处理模型基本数据========");
 						return modelResponse;
 					}
 				});
@@ -156,7 +153,6 @@ public class ModeServiceImpl {
 		p.setPageSize(pageSize);
 		p.setTotalPages(rs.getTotalPages());
 		p.setTotalRecords((int) rs.getTotalElements());
-		log.info("结束查询模型list======");
 		return p;
 	}
 
