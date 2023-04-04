@@ -108,7 +108,7 @@ class ModelApiService {
             if (CollectionUtil.isNotEmpty(metas)) {
                 for (meta in metas) {
                     val imagesApiDTO = ImagesApiDTO()
-                    imagesApiDTO.url = meta!!.qiniuUrl
+                    imagesApiDTO.url = meta!!.qiniuUrl + "?imageView2/2/w/100"
                     imagesApiDTO.nsfw = false
                     val imgInfo = getImgInfo(meta.qiniuUrl)
                     val width = imgInfo.getInteger("width")
