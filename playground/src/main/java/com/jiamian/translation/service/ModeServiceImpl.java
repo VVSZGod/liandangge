@@ -186,9 +186,11 @@ public class ModeServiceImpl {
 				String tagText = ObjectUtils.isNotEmpty(modelTag.getTagText())
 						? modelTag.getTagText()
 						: "";
-
-				modelDetailResponse.setTrainedWords(
-						Arrays.asList(trainedWords.trim().split(",")));
+				modelDetailResponse.setTrainedWords(new ArrayList<>());
+				if (StringUtils.isNotEmpty(trainedWords)) {
+					modelDetailResponse.setTrainedWords(
+							Arrays.asList(trainedWords.trim().split(",")));
+				}
 				modelDetailResponse
 						.setTags(Arrays.asList(tagText.trim().split(",")));
 				modelDetailResponse.setBaseModel(baseModel);
