@@ -341,7 +341,6 @@ public class ModeServiceImpl {
 				modelResponse.getDownloadCount() + ldgDownloadCount);
 		if (aliUrl.isEmpty()) {
 			modelResponse.setDownloadCount(0);
-			modelResponse.setRating("0.0");
 		}
 		List<ModelCreator> modelCreators = modelCreatorRepository
 				.findByModelId(modelId);
