@@ -1,7 +1,5 @@
 package com.jiamian.translation.util;
 
-import java.math.BigDecimal;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

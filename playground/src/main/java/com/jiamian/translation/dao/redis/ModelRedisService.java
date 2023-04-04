@@ -1,8 +1,11 @@
 package com.jiamian.translation.dao.redis;
 
-import com.jiamian.translation.entity.response.ModelTypeResponse;
-import com.jiamian.translation.redis.RedisCacheKey;
-import com.jiamian.translation.redis.RedisDao;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +13,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
+import com.jiamian.translation.redis.RedisCacheKey;
+import com.jiamian.translation.redis.RedisDao;
 
 @Component
 public class ModelRedisService {
@@ -26,6 +26,7 @@ public class ModelRedisService {
 	private RedisTemplate redisTemplate;
 	@Autowired
 	private RedisDao redisDao;
+
 
 	public void setModelUploadCount(int count) {
 		redisTemplate.opsForValue()
