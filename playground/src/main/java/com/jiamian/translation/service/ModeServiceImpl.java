@@ -84,7 +84,6 @@ public class ModeServiceImpl {
 	@Autowired
 	private ModelServiceDao modelServiceDao;
 
-
 	@Transactional(rollbackFor = Exception.class)
 	public Page<ModelResponse> pageModel(Integer pageNo, Integer pageSize,
 			String key, String type, Integer sortType, Long userId) {
@@ -173,7 +172,7 @@ public class ModeServiceImpl {
 			List<MetaDTO> metaDTOList = metaList.stream().map(meta -> {
 				MetaDTO metaDTO = new MetaDTO();
 				BeanUtil.copyProperties(meta, metaDTO);
-				metaDTO.setQiniuUrl(meta.getQiniuUrl()+"-mshalf");
+				metaDTO.setQiniuUrl(meta.getQiniuUrl() + "-mshalf");
 				return metaDTO;
 			}).collect(Collectors.toList());
 			List<ModelTags> modelTags = modelTagsRepository
@@ -282,16 +281,17 @@ public class ModeServiceImpl {
 				int downloadCount = Integer.parseInt(value[6].toString());
 				String rating = value[7].toString();
 				int ldgDownloadCount = Integer.parseInt(value[8].toString());
+				String alUrl = value[9].toString();
 				modelResponse.setId(id);
 				modelResponse.setModelId(modelId);
 				modelResponse.setName(modelName);
 				modelResponse.setCreateDate(createDate);
 				modelResponse.setDescription(description);
 				modelResponse.setType(type);
-				modelResponse
-						.setDownloadCount(downloadCount + ldgDownloadCount);
+				modelResponse.setDownloadCount(downloadCount);
 				modelResponse.setRating(rating);
-				this.setModelData(modelResponse, "", userId, ldgDownloadCount);
+				this.setModelData(modelResponse, alUrl, userId,
+						ldgDownloadCount);
 				listModel.add(modelResponse);
 			}
 		}
@@ -316,7 +316,7 @@ public class ModeServiceImpl {
 				&& StringUtils.isNotEmpty(optionalMeta.get().getQiniuUrl())) {
 			Meta meta = optionalMeta.get();
 			String qiniuUrl = meta.getQiniuUrl();
-			modelResponse.setImageUrl(qiniuUrl+"-mshalf");
+			modelResponse.setImageUrl(qiniuUrl + "-mshalf");
 			// 判断图片大小，没有则保存图片大小
 			if (meta.getHeight() > 0) {
 				modelResponse.setImageHeight(meta.getHeight());
