@@ -335,6 +335,8 @@ public class ModeServiceImpl {
 				}
 			}
 		}
+		modelResponse.setDownloadCount(
+				modelResponse.getDownloadCount() + ldgDownloadCount);
 		if (aliUrl.isEmpty()) {
 			modelResponse.setDownloadCount(0);
 			modelResponse.setRating("0.0");
@@ -355,8 +357,7 @@ public class ModeServiceImpl {
 			modelResponse.setCollectStat(
 					modelRedisService.isCollectionModelUser(userId, modelId));
 		}
-		modelResponse.setDownloadCount(
-				modelResponse.getDownloadCount() + ldgDownloadCount);
+
 	}
 
 	public void userCollectionModel(Long userId, Long modelId) {
