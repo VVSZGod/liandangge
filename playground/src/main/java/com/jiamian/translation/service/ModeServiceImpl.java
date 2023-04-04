@@ -177,6 +177,7 @@ public class ModeServiceImpl {
 			List<MetaDTO> metaDTOList = metaList.stream().map(meta -> {
 				MetaDTO metaDTO = new MetaDTO();
 				BeanUtil.copyProperties(meta, metaDTO);
+				metaDTO.setQiniuUrl(meta.getQiniuUrl()+"-mshalf");
 				return metaDTO;
 			}).collect(Collectors.toList());
 			List<ModelTags> modelTags = modelTagsRepository
@@ -319,7 +320,7 @@ public class ModeServiceImpl {
 				&& StringUtils.isNotEmpty(optionalMeta.get().getQiniuUrl())) {
 			Meta meta = optionalMeta.get();
 			String qiniuUrl = meta.getQiniuUrl();
-			modelResponse.setImageUrl(qiniuUrl);
+			modelResponse.setImageUrl(qiniuUrl+"-mshalf");
 			// 判断图片大小，没有则保存图片大小
 			if (meta.getHeight() > 0) {
 				modelResponse.setImageHeight(meta.getHeight());
