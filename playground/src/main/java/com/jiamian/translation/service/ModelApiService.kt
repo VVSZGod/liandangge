@@ -111,8 +111,8 @@ class ModelApiService {
                     imagesApiDTO.url = meta!!.qiniuUrl + "?imageView2/2/w/100"
                     imagesApiDTO.nsfw = false
                     val imgInfo = getImgInfo(meta.qiniuUrl)
-                    val width = imgInfo.getInteger("width")
-                    val height = imgInfo.getInteger("height")
+                    val width = imgInfo.getIntValue("width").or(56)
+                    val height = imgInfo.getIntValue("height").or(56)
                     imagesApiDTO.width = width
                     imagesApiDTO.height = height
                     val metaApiDTO = MetaApiDTO()
@@ -134,17 +134,6 @@ class ModelApiService {
         }
 
         return ApiResp(item, MetaDataApiDTO(p.totalElements, pageIdx, pageSize, p.totalPages))
-    }
-
-    inner class ApiResp {
-        var items: List<ModelApiDTO> = Lists.newArrayList()
-        var metadata: MetaDataApiDTO = MetaDataApiDTO(0, 0, 0, 0)
-
-        constructor() {}
-        constructor(items: List<ModelApiDTO>, metadata: MetaDataApiDTO) {
-            this.items = items
-            this.metadata = metadata
-        }
     }
 
     companion object {
