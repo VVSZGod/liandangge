@@ -22,8 +22,8 @@
         <module>playground</module>
         <module>data</module>
         <module>common</module>
+        <module>civitai</module>
     </modules>
-
 
     <properties>
         <java.version>1.8</java.version>

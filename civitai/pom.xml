@@ -2,16 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>playground</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-
     <parent>
-        <groupId>com.jiamian</groupId>
         <artifactId>translation</artifactId>
+        <groupId>com.jiamian</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
+    <modelVersion>4.0.0</modelVersion>
 
+    <artifactId>civitai</artifactId>
 
     <dependencies>
 
@@ -37,12 +35,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/khttp/khttp -->
-<!--        <dependency>-->
-<!--            <groupId>khttp</groupId>-->
-<!--            <artifactId>khttp</artifactId>-->
-<!--            <version>1.0.0</version>-->
-<!--        </dependency>-->
+
 
         <!-- SpringBoot Web容器 -->
         <dependency>
@@ -114,7 +107,7 @@
 
     <!-- build -->
     <build>
-        <finalName>web-service</finalName>
+        <finalName>civitai-service</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -122,5 +115,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
