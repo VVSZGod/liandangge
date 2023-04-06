@@ -9,8 +9,10 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.jiamian.translation.common.constant.CommonConstant;
-import com.jiamian.translation.common.entity.JsonResult;
+
+import com.jiamian.translation.common.utils.ServletUtil;
+import com.jiamian.translation.constant.CommonConstant;
+import com.jiamian.translation.entity.JsonResult;
 import com.jiamian.translation.util.*;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;

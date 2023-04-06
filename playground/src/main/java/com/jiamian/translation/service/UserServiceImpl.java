@@ -13,16 +13,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jiamian.translation.common.entity.dto.ShortMessage;
-import com.jiamian.translation.common.exception.BOException;
-import com.jiamian.translation.common.exception.ErrorMsg;
+import com.jiamian.translation.common.config.SystemConfig;
 import com.jiamian.translation.common.service.LxtService;
-import com.jiamian.translation.dao.redis.UserRedisService;
+import com.jiamian.translation.dao.model.Users;
 import com.jiamian.translation.dao.repository.UserInfoRepository;
+import com.jiamian.translation.entity.dto.ShortMessage;
 import com.jiamian.translation.entity.dto.UserInfoDTO;
 import com.jiamian.translation.entity.response.LoginUserResponse;
-import com.jiamian.translation.model.Users;
+import com.jiamian.translation.exception.BOException;
+import com.jiamian.translation.exception.ErrorMsg;
 import com.jiamian.translation.redis.RedisDao;
+import com.jiamian.translation.redis.UserRedisService;
 import com.jiamian.translation.util.AESUtils;
 import com.jiamian.translation.util.UserTokenUtil;
 
@@ -101,8 +102,8 @@ public class UserServiceImpl {
 		userInfo.setLastLoginTime(LocalDateTime.now());
 		userInfo = userInfoRepository.save(userInfo);
 		BeanUtil.copyProperties(userInfo, loginUserResponse);
-		loginUserResponse.setToken(
-				UserTokenUtil.generateToken(loginUserResponse.getUserId()));
+		loginUserResponse.setToken(UserTokenUtil.generateToken(
+				loginUserResponse.getUserId(), SystemConfig.getSecret()));
 		return loginUserResponse;
 
 	}
@@ -239,8 +240,8 @@ public class UserServiceImpl {
 				throw new BOException(ErrorMsg.EMAIL_OR_PASSWD_ERROR);
 			}
 			BeanUtil.copyProperties(users, loginUserResponse);
-			loginUserResponse.setToken(
-					UserTokenUtil.generateToken(loginUserResponse.getUserId()));
+			loginUserResponse.setToken(UserTokenUtil.generateToken(
+					loginUserResponse.getUserId(), SystemConfig.getSecret()));
 			loginUserResponse.setRegisterStat(false);
 			users.setLastLoginTime(LocalDateTime.now());
 			userInfoRepository.save(users);
@@ -249,7 +250,6 @@ public class UserServiceImpl {
 		}
 		return loginUserResponse;
 	}
-
 
 	private void checkPassWord(String newPasswd, String replyNewPasswd) {
 		String decrypt = AESUtils.decrypt(newPasswd);

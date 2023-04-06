@@ -2,7 +2,7 @@ package com.jiamian.translation.common.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jiamian.translation.common.config.LxtConfig;
-import com.jiamian.translation.common.entity.dto.ShortMessage;
+import com.jiamian.translation.entity.dto.ShortMessage;
 import com.jiamian.translation.util.OkHttpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

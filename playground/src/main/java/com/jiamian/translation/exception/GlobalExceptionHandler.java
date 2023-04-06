@@ -4,8 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.jiamian.translation.common.entity.JsonResult;
-import com.jiamian.translation.common.exception.ErrorCodeEnum;
+import com.jiamian.translation.entity.JsonResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;

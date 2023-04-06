@@ -1,6 +1,6 @@
 package com.jiamian.translation.service;
 
-import com.jiamian.translation.common.exception.BOException;
+import com.jiamian.translation.exception.BOException;
 import com.jiamian.translation.config.QiNiuConfig;
 import com.qiniu.cdn.CdnManager;
 import com.qiniu.http.Response;

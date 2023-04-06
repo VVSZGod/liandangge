@@ -2,14 +2,13 @@ package com.jiamian.translation.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.JSON;
-import com.jiamian.translation.common.enums.YesOrNo;
-import com.jiamian.translation.dao.redis.ModelRedisService;
+import com.jiamian.translation.enums.YesOrNo;
+import com.jiamian.translation.redis.ModelRedisService;
 import com.jiamian.translation.dao.repository.ModelTypeRepository;
 import com.jiamian.translation.entity.response.ModelTypeResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.jiamian.translation.annotation.LoginUser;
-import com.jiamian.translation.common.entity.JsonResult;
-import com.jiamian.translation.common.entity.Page;
+import com.jiamian.translation.entity.JsonResult;
+import com.jiamian.translation.entity.Page;
 import com.jiamian.translation.entity.response.ModelResponse;
 import com.jiamian.translation.service.ModeServiceImpl;
 import com.jiamian.translation.util.UserTokenUtil;

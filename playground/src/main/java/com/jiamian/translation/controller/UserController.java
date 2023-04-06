@@ -1,10 +1,9 @@
 package com.jiamian.translation.controller;
 
-import cn.hutool.core.util.ObjectUtil;
 import com.jiamian.translation.annotation.LoginUser;
-import com.jiamian.translation.common.entity.JsonResult;
-import com.jiamian.translation.common.exception.BOException;
-import com.jiamian.translation.common.exception.ErrorMsg;
+import com.jiamian.translation.entity.JsonResult;
+import com.jiamian.translation.exception.BOException;
+import com.jiamian.translation.exception.ErrorMsg;
 import com.jiamian.translation.component.HttpDao;
 import com.jiamian.translation.entity.dto.UserInfoDTO;
 import com.jiamian.translation.entity.response.LoginUserResponse;
@@ -15,7 +14,6 @@ import com.jiamian.translation.util.AESUtils;
 import com.jiamian.translation.util.UserTokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

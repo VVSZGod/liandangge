@@ -24,13 +24,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
-import com.jiamian.translation.common.entity.Page;
-import com.jiamian.translation.common.enums.SortTypeEnum;
-import com.jiamian.translation.common.enums.YesOrNo;
-import com.jiamian.translation.common.exception.BOException;
-import com.jiamian.translation.common.exception.ErrorMsg;
+import com.jiamian.translation.entity.Page;
+import com.jiamian.translation.enums.SortTypeEnum;
+import com.jiamian.translation.enums.YesOrNo;
+import com.jiamian.translation.exception.BOException;
+import com.jiamian.translation.exception.ErrorMsg;
 import com.jiamian.translation.dao.ModelServiceDao;
-import com.jiamian.translation.dao.redis.ModelRedisService;
+import com.jiamian.translation.redis.ModelRedisService;
 import com.jiamian.translation.dao.repository.MetaRepository;
 import com.jiamian.translation.dao.repository.ModelCreatorRepository;
 import com.jiamian.translation.dao.repository.ModelRepository;
@@ -39,10 +39,10 @@ import com.jiamian.translation.entity.dto.api.MetaDTO;
 import com.jiamian.translation.entity.response.ModelDetailResponse;
 import com.jiamian.translation.entity.response.ModelResponse;
 import com.jiamian.translation.entity.response.ModelTypeResponse;
-import com.jiamian.translation.model.Meta;
-import com.jiamian.translation.model.Model;
-import com.jiamian.translation.model.ModelCreator;
-import com.jiamian.translation.model.ModelTags;
+import com.jiamian.translation.dao.model.Meta;
+import com.jiamian.translation.dao.model.Model;
+import com.jiamian.translation.dao.model.ModelCreator;
+import com.jiamian.translation.dao.model.ModelTags;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
@@ -146,7 +146,7 @@ public class ModeServiceImpl {
 						return modelResponse;
 					}
 				});
-		com.jiamian.translation.common.entity.Page<ModelResponse> p = new com.jiamian.translation.common.entity.Page<>();
+		com.jiamian.translation.entity.Page<ModelResponse> p = new com.jiamian.translation.entity.Page<>();
 		p.setList(Lists.newArrayList(rs.getContent()));
 		p.setPageNo(pageNo);
 		p.setPageSize(pageSize);
@@ -255,7 +255,7 @@ public class ModeServiceImpl {
 	@Transactional(rollbackFor = Exception.class)
 	public Page<ModelResponse> modelByTagList(Integer pageNo, Integer pageSize,
 			String key, Integer sortType, Long userId) {
-		com.jiamian.translation.common.entity.Page<ModelResponse> p = new com.jiamian.translation.common.entity.Page<>();
+		com.jiamian.translation.entity.Page<ModelResponse> p = new com.jiamian.translation.entity.Page<>();
 		List<ModelResponse> listModel = new ArrayList<>();
 		// 获取 查询到的 模型结果
 		JSONObject modelListByTag = modelServiceDao.getModelListByTag(pageNo,
@@ -380,7 +380,7 @@ public class ModeServiceImpl {
 	@Transactional(rollbackFor = Exception.class)
 	public Page<ModelResponse> userCollectionModelList(Integer pageNo,
 			Integer pageSize, Long userId) {
-		com.jiamian.translation.common.entity.Page<ModelResponse> p = new com.jiamian.translation.common.entity.Page<>();
+		com.jiamian.translation.entity.Page<ModelResponse> p = new com.jiamian.translation.entity.Page<>();
 		List<ModelResponse> modelResponses = new ArrayList<>();
 		Set<ZSetOperations.TypedTuple<String>> typedTuples = modelRedisService
 				.userCollectionModelList(userId, pageNo, pageSize);

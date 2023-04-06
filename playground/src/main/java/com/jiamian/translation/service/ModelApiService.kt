@@ -7,7 +7,7 @@ import com.jiamian.translation.dao.repository.ModelCreatorRepository
 import com.jiamian.translation.dao.repository.ModelRepository
 import com.jiamian.translation.dao.repository.ModelTagsRepository
 import com.jiamian.translation.entity.dto.api.*
-import com.jiamian.translation.model.Model
+import com.jiamian.translation.dao.model.Model
 import com.jiamian.translation.util.QiniuUtil.getImgInfo
 import org.apache.commons.lang3.ObjectUtils
 import org.springframework.beans.factory.annotation.Autowired
