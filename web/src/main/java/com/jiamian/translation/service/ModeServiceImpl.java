@@ -84,6 +84,9 @@ public class ModeServiceImpl {
 	@Autowired
 	private ModelServiceDao modelServiceDao;
 
+	@Autowired
+	private ModelCreatorServiceImpl modelCreatorService;
+
 	@Transactional(rollbackFor = Exception.class)
 	public Page<ModelResponse> pageModel(Integer pageNo, Integer pageSize,
 			String key, String type, Integer sortType, Long userId,
@@ -103,6 +106,16 @@ public class ModeServiceImpl {
 				} catch (Exception e) {
 					log.info("message{}===id{}", e.getMessage(), key);
 				}
+				List<Long> longs = modelCreatorService
+						.searchModelByUserName(key);
+				if (CollectionUtil.isNotEmpty(longs)) {
+					CriteriaBuilder.In<Object> modelId = cb
+							.in(root.get("modelId"));
+					for (Long a : longs) {
+						modelId.value(a);
+					}
+					predicatesOr.add(modelId);
+				}
 				predicates.add(cb.or(predicatesOr.toArray(new Predicate[] {})));
 			}
 			if (StringUtils.isNotEmpty(type)) {
@@ -119,11 +132,13 @@ public class ModeServiceImpl {
 					predicates.add(cb.equal(root.get("type"), type));
 				}
 			}
-			if(ObjectUtil.isNotNull(chine)){
-				predicates.add(cb.equal(root.get("chinese"), YesOrNo.YES.value()));
+			if (ObjectUtil.isNotNull(chine)) {
+				predicates.add(
+						cb.equal(root.get("chinese"), YesOrNo.YES.value()));
 			}
-			if(ObjectUtil.isNotNull(recommend)){
-				predicates.add(cb.equal(root.get("recommend"), YesOrNo.YES.value()));
+			if (ObjectUtil.isNotNull(recommend)) {
+				predicates.add(
+						cb.equal(root.get("recommend"), YesOrNo.YES.value()));
 			}
 			if (SortTypeEnum.DOWN_COUNT.value().equals(sortType)) {
 				list.add(cb.desc(cb.sum(root.get("downloadCount"),
@@ -163,11 +178,13 @@ public class ModeServiceImpl {
 	}
 
 	@Transactional(rollbackFor = Exception.class)
-	public ModelDetailResponse modelDetail(Long userId, Long modelId) {
+	public ModelDetailResponse modelDetail(Long userId, Long modelId,
+			Long modelVersionId) {
 		ModelDetailResponse modelDetailResponse = new ModelDetailResponse();
 		ModelResponse modelResponse = new ModelResponse();
 		Optional<Model> optionalModel = modelRepository
-				.findByModelIdAndStatus(modelId, YesOrNo.YES.value());
+				.findByModelIdAndStatusAndModelVersionId(modelId,
+						YesOrNo.YES.value(), modelVersionId);
 		if (optionalModel.isPresent()) {
 			Model model = optionalModel.get();
 			BeanUtil.copyProperties(model, modelResponse);
@@ -175,7 +192,8 @@ public class ModeServiceImpl {
 					model.getLdgDownloadCount());
 			BeanUtil.copyProperties(modelResponse, modelDetailResponse);
 			modelDetailResponse.setVersion(model.getVersion());
-			List<Meta> metaList = metaRepository.findByModelId(modelId);
+			List<Meta> metaList = metaRepository
+					.findByModelIdAndModelVersionId(modelId, modelVersionId);
 			List<MetaDTO> metaDTOList = metaList.stream().map(meta -> {
 				MetaDTO metaDTO = new MetaDTO();
 				BeanUtil.copyProperties(meta, metaDTO);
@@ -218,9 +236,11 @@ public class ModeServiceImpl {
 	 * @return
 	 */
 	@Transactional(rollbackFor = Exception.class)
-	public Map<String, String> getModelUrl(Integer modelId) {
-		Optional<Model> optionalModel = modelRepository.findByModelIdAndStatus(
-				modelId.longValue(), YesOrNo.YES.value());
+	public Map<String, String> getModelUrl(Integer modelId,
+			Long modelVersionId) {
+		Optional<Model> optionalModel = modelRepository
+				.findByModelIdAndStatusAndModelVersionId(modelId.longValue(),
+						YesOrNo.YES.value(), modelVersionId);
 		if (optionalModel.isPresent()) {
 			Map<String, String> map = new HashMap<>();
 			Model model = optionalModel.get();
@@ -319,8 +339,8 @@ public class ModeServiceImpl {
 	public void setModelData(ModelResponse modelResponse, String aliUrl,
 			Long userId, Integer ldgDownloadCount) {
 		Long modelId = modelResponse.getModelId();
-		Optional<Meta> optionalMeta = metaRepository
-				.selectModelByModelIdOne(modelId);
+		Optional<Meta> optionalMeta = metaRepository.selectModelByModelIdOne(
+				modelId, modelResponse.getModelVersionId());
 		if (optionalMeta.isPresent()
 				&& StringUtils.isNotEmpty(optionalMeta.get().getQiniuUrl())) {
 			Meta meta = optionalMeta.get();
@@ -370,7 +390,7 @@ public class ModeServiceImpl {
 
 	public void userCollectionModel(Long userId, Long modelId) {
 		Optional<Model> optionalModel = modelRepository
-				.findByModelIdAndStatus(modelId, YesOrNo.YES.value());
+				.selectModelByModelIdAndStatus(modelId, YesOrNo.YES.value());
 		if (!optionalModel.isPresent()) {
 			throw new BOException(ErrorMsg.MODEL_NOT_FOUND_ERROR);
 		}
@@ -397,7 +417,7 @@ public class ModeServiceImpl {
 			Double score = typedTuple.getScore();
 			ModelResponse modelResponse = new ModelResponse();
 			Optional<Model> optionalModel = modelRepository
-					.findByModelId(modelId);
+					.selectModelByModelId(modelId);
 			BeanUtil.copyProperties(optionalModel.get(), modelResponse);
 			this.setModelData(modelResponse, optionalModel.get().getAliUrl(),
 					userId, optionalModel.get().getLdgDownloadCount());
@@ -413,5 +433,14 @@ public class ModeServiceImpl {
 		p.setPageSize(pageSize);
 		p.setTotalPages((modelCount - 1) / pageSize + 1);
 		return p;
+	}
+
+	public List<ModelResponse> modelListVersion(Long modelId) {
+		List<Model> modelList = modelRepository.findByModelId(modelId);
+		return modelList.stream().map(model -> {
+			ModelResponse modelResponse = new ModelResponse();
+			BeanUtil.copyProperties(model, modelResponse);
+			return modelResponse;
+		}).collect(Collectors.toList());
 	}
 }

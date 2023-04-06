@@ -18,7 +18,6 @@ public interface ModelCreatorRepository
 		extends JpaRepository<ModelCreator, Long> {
 	List<ModelCreator> findByModelId(Long modelId);
 
-	@Query(nativeQuery = true, value = "select * from model_type where status=1 and " +
-			"show_status=:showStatus order by sort_key desc ")
-	List<Long> selectModelByUserName(Integer showStatus);
+	@Query(nativeQuery = true, value = "select model_id from model_creator where username like %:userName%")
+	List<Long> selectModelByUserName(String userName);
 }

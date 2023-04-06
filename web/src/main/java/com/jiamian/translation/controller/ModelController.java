@@ -58,25 +58,28 @@ public class ModelController {
 			@LoginUser Long userId) {
 		userId = UserTokenUtil.createUserId(userId);
 		Page<ModelResponse> modelResponsePage = modeService.pageModel(pageNo,
-				pageSize, key, type, sortType, userId,chine,recommend);
+				pageSize, key, type, sortType, userId, chine, recommend);
 		return JsonResult.succResult(modelResponsePage);
 	}
 
 	@GetMapping("/detail")
 	@ApiOperation("模型详情")
 	public JsonResult<ModelDetailResponse> modelDetail(@LoginUser Long userId,
-			@RequestParam(value = "modelId") Integer modelId) {
+			@RequestParam(value = "modelId") Integer modelId,
+			@RequestParam(value = "modelVersionId") Long modelVersionId) {
 		ModelDetailResponse modelDetailResponse = modeService
-				.modelDetail(userId, modelId.longValue());
+				.modelDetail(userId, modelId.longValue(), modelVersionId);
 		return JsonResult.succResult(modelDetailResponse);
 	}
 
 	@GetMapping("/url")
 	@ApiOperation("模型链接下载11")
 	public JsonResult<Map<String, String>> getModelUrl(@LoginUser Long userId,
-			@RequestParam(value = "modelId") Integer modelId) {
+			@RequestParam(value = "modelId") Integer modelId,
+			@RequestParam(value = "modelVersionId") Long modelVersionId) {
 		UserTokenUtil.needLogin(userId);
-		return JsonResult.succResult(modeService.getModelUrl(modelId));
+		return JsonResult
+				.succResult(modeService.getModelUrl(modelId, modelVersionId));
 	}
 
 	@GetMapping("/count")
@@ -119,5 +122,14 @@ public class ModelController {
 		Page<ModelResponse> modelResponsePage = modeService
 				.modelByTagList(pageNo, pageSize, key, sortType, userId);
 		return JsonResult.succResult(modelResponsePage);
+	}
+
+	@GetMapping("/list/version")
+	@ApiOperation("查找模型版本列表")
+	public JsonResult<List<ModelResponse>> modelListVersion(
+			@RequestParam(value = "modelId") Long modelId) {
+		List<ModelResponse> modelResponses = modeService
+				.modelListVersion(modelId);
+		return JsonResult.succResult(modelResponses);
 	}
 }

@@ -13,6 +13,6 @@ public class ModelCreatorServiceImpl {
 	private ModelCreatorRepository modelCreatorRepository;
 
 	public List<Long> searchModelByUserName(String userName) {
-		return null;
+		return modelCreatorRepository.selectModelByUserName(userName);
 	}
 }

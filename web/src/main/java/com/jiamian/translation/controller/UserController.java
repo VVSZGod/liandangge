@@ -71,9 +71,8 @@ public class UserController {
 		String phoneAreaCode = loginRequest.getPhoneAreaCode();
 		String passWd = loginRequest.getPassWd();
 		String newPassWd = loginRequest.getNewPassWd();
-		LoginUserResponse loginUserResponse = userService.register(
-				phoneNumber, phoneAreaCode, verificationCode, passWd,
-				newPassWd);
+		LoginUserResponse loginUserResponse = userService.register(phoneNumber,
+				phoneAreaCode, verificationCode, passWd, newPassWd);
 		return JsonResult.succResult(loginUserResponse);
 	}
 
@@ -87,5 +86,15 @@ public class UserController {
 		UserResponse userResponse = new UserResponse();
 		userResponse.setUserInfoDTO(appUserInfoDTO);
 		return JsonResult.succResult(userResponse);
+	}
+
+	@PostMapping("/info/setting")
+	@ApiOperation("修改用户信息")
+	public JsonResult updateUser(@LoginUser Long userId,
+			@RequestParam(value = "userName", required = false) String userName,
+			@RequestParam(value = "avatarUrl", required = false) String avatarUrl) {
+		UserTokenUtil.needLogin(userId);
+		userService.updateUser(userName, avatarUrl, userId);
+		return JsonResult.succResult();
 	}
 }

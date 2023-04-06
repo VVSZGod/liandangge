@@ -34,6 +34,7 @@ public class ModelResponse {
 	private String description;
 
 	private Integer downloadCount;
+
 	private String rating;
 
 	@ApiModelProperty(value = "")
@@ -55,5 +56,7 @@ public class ModelResponse {
 	private Integer chinese;
 
 	private Integer recommend;
+
+	private Integer status;
 
 }
