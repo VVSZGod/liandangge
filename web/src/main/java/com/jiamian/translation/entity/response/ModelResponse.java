@@ -20,6 +20,8 @@ public class ModelResponse {
 
 	private Long modelId;
 
+	private Long modelVersionId;
+
 	private String name;
 
 	private String type;
@@ -49,5 +51,9 @@ public class ModelResponse {
 	private Integer imageWidth;
 
 	private Integer imageHeight;
+
+	private Integer chinese;
+
+	private Integer recommend;
 
 }

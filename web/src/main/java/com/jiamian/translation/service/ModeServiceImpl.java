@@ -86,7 +86,8 @@ public class ModeServiceImpl {
 
 	@Transactional(rollbackFor = Exception.class)
 	public Page<ModelResponse> pageModel(Integer pageNo, Integer pageSize,
-			String key, String type, Integer sortType, Long userId) {
+			String key, String type, Integer sortType, Long userId,
+			Integer chine, Integer recommend) {
 		PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
 		Specification<Model> specification = (Specification<Model>) (root,
 				criteriaQuery, cb) -> {
@@ -117,6 +118,12 @@ public class ModeServiceImpl {
 				} else {
 					predicates.add(cb.equal(root.get("type"), type));
 				}
+			}
+			if(ObjectUtil.isNotNull(chine)){
+				predicates.add(cb.equal(root.get("chinese"), YesOrNo.YES.value()));
+			}
+			if(ObjectUtil.isNotNull(recommend)){
+				predicates.add(cb.equal(root.get("recommend"), YesOrNo.YES.value()));
 			}
 			if (SortTypeEnum.DOWN_COUNT.value().equals(sortType)) {
 				list.add(cb.desc(cb.sum(root.get("downloadCount"),

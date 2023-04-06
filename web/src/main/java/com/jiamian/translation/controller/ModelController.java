@@ -53,10 +53,12 @@ public class ModelController {
 			@RequestParam(value = "key", required = false) String key,
 			@RequestParam(value = "type", required = false) @ApiParam("类型") String type,
 			@RequestParam(value = "sortType", defaultValue = "1") Integer sortType,
+			@RequestParam(value = "chine", required = false) @ApiParam("华人(不查不传) 1") Integer chine,
+			@RequestParam(value = "recommend", required = false) @ApiParam("推荐(不查不传) 1") Integer recommend,
 			@LoginUser Long userId) {
 		userId = UserTokenUtil.createUserId(userId);
 		Page<ModelResponse> modelResponsePage = modeService.pageModel(pageNo,
-				pageSize, key, type, sortType,userId);
+				pageSize, key, type, sortType, userId,chine,recommend);
 		return JsonResult.succResult(modelResponsePage);
 	}
 

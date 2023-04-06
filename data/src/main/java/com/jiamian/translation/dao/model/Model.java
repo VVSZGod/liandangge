@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @DynamicUpdate
 @Table(name = "model")
 public class Model implements Serializable {
-	public static final long serialVersionUID = 6071459448611999698L;
+	public static final long serialVersionUID = 4687212206345285227L;
 	private Long id;
 	private Long modelId;
 	private String name;
@@ -35,6 +35,8 @@ public class Model implements Serializable {
 	private String rating;
 	private Integer ldgDownloadCount;
 	private String version;
+	private Integer chinese;
+	private Integer recommend;
 
 	public Model() {
 	}
@@ -44,7 +46,7 @@ public class Model implements Serializable {
 			LocalDateTime createDate, String aliUrl, String aliPwd,
 			Integer downloadCount, Integer favoriteCount, Integer commentCount,
 			Integer ratingCount, String rating, Integer ldgDownloadCount,
-			String version) {
+			String version, Integer chinese, Integer recommend) {
 		this.modelId = modelId;
 		this.name = name;
 		this.type = type;
@@ -63,6 +65,8 @@ public class Model implements Serializable {
 		this.rating = rating;
 		this.ldgDownloadCount = ldgDownloadCount;
 		this.version = version;
+		this.chinese = chinese;
+		this.recommend = recommend;
 	}
 
 	@Id
@@ -251,6 +255,24 @@ public class Model implements Serializable {
 
 	public void setVersion(String version) {
 		this.version = version;
+	}
+
+	@Column(name = "chinese")
+	public Integer getChinese() {
+		return chinese;
+	}
+
+	public void setChinese(Integer chinese) {
+		this.chinese = chinese;
+	}
+
+	@Column(name = "recommend")
+	public Integer getRecommend() {
+		return recommend;
+	}
+
+	public void setRecommend(Integer recommend) {
+		this.recommend = recommend;
 	}
 
 }
