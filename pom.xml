@@ -12,14 +12,14 @@
 
 
     <groupId>com.jiamian</groupId>
-    <artifactId>translation</artifactId>
+    <artifactId>liandange</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>translation</name>
+    <name>liandange</name>
     <packaging>pom</packaging>
 
 
     <modules>
-        <module>playground</module>
+        <module>web</module>
         <module>data</module>
         <module>common</module>
         <module>civitai</module>
