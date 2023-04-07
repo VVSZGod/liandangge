@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RestController
 open class ModelApiController {
 
     @Autowired
-    lateinit var modelApiService: ModelApiService;
+    private lateinit var modelApiService: ModelApiService;
 
 
     @GetMapping("/models")
-     fun pageModel(@RequestParam(value = "page") page: Int, @RequestParam(value = "limit") pageSize: Int): String {
+     open fun pageModel(@RequestParam(value = "page") page: Int, @RequestParam(value = "limit") pageSize: Int): String {
         return JSONObject.toJSONString(modelApiService.pageModelApi(pageSize, page))
     }
 }
