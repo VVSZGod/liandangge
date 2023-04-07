@@ -47,9 +47,13 @@ class ModelApiService {
 
         val item: MutableList<ModelApiDTO> = Lists.newArrayList()
 
-        val p = modelRepository.findAll(Example.of(example),
-                PageRequest.of(pageIdx, pageSize, Sort.Direction.ASC,
-                        "id"))
+        val p = modelRepository.findAll(
+            Example.of(example),
+            PageRequest.of(
+                pageIdx, pageSize, Sort.Direction.ASC,
+                "id"
+            )
+        )
 
         for (dbModel in p.content) {
             val modelApiDTO = ModelApiDTO(dbModel.id)
@@ -58,8 +62,10 @@ class ModelApiService {
             modelApiDTO.type = dbModel.type
             var trainedWords = ""
             var baseModel = ""
-            val downloadUrl = String.format(MODEL_DETAIL_URL,
-                    dbModel.modelId)
+            val downloadUrl = String.format(
+                MODEL_DETAIL_URL,
+                dbModel.modelId
+            )
 
 
             val statusApiDTO = StatusApiDTO()
@@ -81,12 +87,14 @@ class ModelApiService {
 
 
             val modelTags = modelTagsRepository
-                    .findByModelId(dbModel.modelId)
+                .findByModelId(dbModel.modelId)
             if (CollectionUtil.isNotEmpty(modelTags)) {
                 val modelT = modelTags[0]
                 val tags = modelT!!.tagText
                 trainedWords = if (ObjectUtils.isNotEmpty(
-                                modelT.trainedWords)) modelT.trainedWords else ""
+                        modelT.trainedWords
+                    )
+                ) modelT.trainedWords else ""
                 baseModel = modelT.baseModel
                 modelApiDTO.tags = Arrays.asList(*tags.split(",".toRegex()).toTypedArray())
             }
@@ -105,7 +113,7 @@ class ModelApiService {
             filesApiDTO.downloadUrl = downloadUrl
             mvDTO.files = Lists.newArrayList(filesApiDTO)
             val metas = metaRepository
-                    .findByModelId(dbModel.modelId)
+                .findByModelIdAndModelVersionId(dbModel.modelId, dbModel.modelVersionId)
             val images: MutableList<ImagesApiDTO> = Lists.newArrayList()
             if (CollectionUtil.isNotEmpty(metas)) {
                 for (meta in metas) {

@@ -21,12 +21,17 @@ object BaiduYunPanUtil {
 
     val CREATE_URL = "https://pan.baidu.com/rest/2.0/xpan/file?method=create&access_token=%s"
 
-    val UPLOAD_URL = "https://d.pcs.baidu.com/rest/2.0/pcs/superfile2?method=upload&access_token=%s&type=tmpfile&path=%s&uploadid=%s&partseq=%s"
+    val UPLOAD_URL =
+        "https://d.pcs.baidu.com/rest/2.0/pcs/superfile2?method=upload&access_token=%s&type=tmpfile&path=%s&uploadid=%s&partseq=%s"
 
     @JvmStatic
     fun main(args: Array<String>) {
-        uploadFile("D:\\software\\chat\\wechatTemp\\WeChat Files\\Answer-0506\\FileStorage\\File\\2023-03\\meta1" +
-                ".csv", "/apps/qqw/test2.csv", "123.e70a807e0669101309fa035021f31b78.Y5E-CRa0e2a9wtUyjoYV9GUYYWh8HfAb9zQ40JO.wYVN9A")
+        uploadFile(
+            "D:\\software\\chat\\wechatTemp\\WeChat Files\\Answer-0506\\FileStorage\\File\\2023-03\\meta1" +
+                    ".csv",
+            "/apps/qqw/test2.csv",
+            "123.e70a807e0669101309fa035021f31b78.Y5E-CRa0e2a9wtUyjoYV9GUYYWh8HfAb9zQ40JO.wYVN9A"
+        )
     }
 
     fun uploadFile(localFilePath: String, yunFilePath: String, accessToken: String) {
@@ -78,18 +83,26 @@ object BaiduYunPanUtil {
     }
 
 
-    private fun doUploadFile(accessToken:
-                             String, path: String, uploadId: String, md5List: List<Pair<String, ByteArray>>) {
+    private fun doUploadFile(
+        accessToken:
+        String, path: String, uploadId: String, md5List: List<Pair<String, ByteArray>>
+    ) {
         println("== start do upload ==")
         for (index in md5List.indices) {
-            println(post(UPLOAD_URL.format(accessToken, path, uploadId, index),
-                    files = Lists.newArrayList(FileLike("file", md5List[index].second))).jsonObject)
+            println(
+                post(
+                    UPLOAD_URL.format(accessToken, path, uploadId, index),
+                    files = Lists.newArrayList(FileLike("file", md5List[index].second))
+                ).jsonObject
+            )
         }
     }
 
-    private fun createFile(accessToken: String, yunFilePath: String, rtype: Int, isDir: Int, uploadId: String, md5List:
-    List<Pair<String,
-            ByteArray>>) {
+    private fun createFile(
+        accessToken: String, yunFilePath: String, rtype: Int, isDir: Int, uploadId: String, md5List:
+        List<Pair<String,
+                ByteArray>>
+    ) {
         val preCreatParam = JSONObject()
         val totalSize = md5List.sumBy { it.second.size }
         preCreatParam.put("block_list", JSONArray(md5List.map {

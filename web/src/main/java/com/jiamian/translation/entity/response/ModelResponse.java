@@ -20,6 +20,8 @@ public class ModelResponse {
 
 	private Long modelId;
 
+	private Long modelVersionId;
+
 	private String name;
 
 	private String type;
@@ -29,9 +31,8 @@ public class ModelResponse {
 
 	private String imageUrl;
 
-	private String description;
-
 	private Integer downloadCount;
+
 	private String rating;
 
 	@ApiModelProperty(value = "")
@@ -49,5 +50,15 @@ public class ModelResponse {
 	private Integer imageWidth;
 
 	private Integer imageHeight;
+
+	private Integer chinese;
+
+	private Integer recommend;
+
+	private Integer status;
+
+	private String version;
+
+	private boolean modelClaimStat;
 
 }

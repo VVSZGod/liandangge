@@ -40,7 +40,7 @@ public class LogAop {
 	/**
 	 * 切点
 	 */
-	private static final String POINTCUT = "execution(public * com.jiamian.com.jiamian.translation.controller..*.*(..))";
+	private static final String POINTCUT = "execution(public * com.jiamian.translation.controller..*.*(..))";
 
 	/**
 	 * 默认的请求内容类型,表单提交

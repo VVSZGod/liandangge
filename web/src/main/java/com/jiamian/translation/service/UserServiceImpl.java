@@ -5,7 +5,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import com.jiamian.translation.entity.MachineCheckResult;
+import com.jiamian.translation.entity.MachineCheckResultEnum;
+import com.jiamian.translation.util.YiDunApi;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -203,16 +207,12 @@ public class UserServiceImpl {
 	}
 
 	@Transactional(rollbackFor = Exception.class)
-	public void updateUser(String userName, Integer gender, String avatarUrl,
-			Long userId) {
-		// this.validParam(userName, gender, avatarUrl);
+	public void updateUser(String userName, String avatarUrl, Long userId) {
 		Optional<Users> optionalAppUserInfo = userInfoRepository
 				.findByUserId(userId);
 		if (optionalAppUserInfo.isPresent()) {
 			Users userInfo = optionalAppUserInfo.get();
-			userInfo.setUserName(userName);
-			userInfo.setAvatarUrl(avatarUrl);
-			userInfo.setGender(gender);
+			this.validUserParam(userName, avatarUrl, userInfo);
 			userInfoRepository.save(userInfo);
 		} else {
 			throw new BOException(ErrorMsg.USER_NOT_FOUND_ERROR);
@@ -258,6 +258,32 @@ public class UserServiceImpl {
 		}
 		if (!newPasswd.equals(replyNewPasswd)) {
 			throw new BOException(ErrorMsg.REPLY_PASS_WORD_ERROR);
+		}
+	}
+
+	private void validUserParam(String userName, String avatarUrl,
+			Users users) {
+		if (StringUtils.isNotEmpty(userName)) {
+			if (userName.length() >= 1 && userName.length() < 20) {
+				MachineCheckResult userNameResult = YiDunApi
+						.checkText(userName);
+				if (MachineCheckResultEnum.PASS.getCode()
+						.intValue() != userNameResult.getRsEnum().getCode()) {
+					throw new BOException(ErrorMsg.USER_INFO_EDIT_ERROR);
+				}
+				users.setUserName(userName);
+			} else {
+				throw new BOException(ErrorMsg.NICK_NAME_SHORT_ERROR);
+			}
+
+		}
+		if (StringUtils.isNotEmpty(avatarUrl)) {
+			MachineCheckResult avatarUrlResult = YiDunApi.checkImage(avatarUrl);
+			if (MachineCheckResultEnum.PASS.getCode()
+					.intValue() != avatarUrlResult.getRsEnum().getCode()) {
+				throw new BOException(ErrorMsg.USER_INFO_EDIT_ERROR);
+			}
+			users.setAvatarUrl(avatarUrl);
 		}
 	}
 

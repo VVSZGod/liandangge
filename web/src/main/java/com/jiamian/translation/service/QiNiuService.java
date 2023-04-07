@@ -10,6 +10,7 @@ import com.qiniu.storage.UploadManager;
 import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
+import java.util.UUID;
 
 @Component
 @ConditionalOnBean(QiNiuConfig.class)
@@ -29,7 +31,7 @@ public class QiNiuService {
 	private QiNiuConfig qiNiuConfig;
 
 	public void uploadFile(InputStream inputStream, String fileKey) {
-		Configuration cfg = new Configuration(Region.region0());
+		Configuration cfg = new Configuration(Region.autoRegion());
 		UploadManager uploadManager = new UploadManager(cfg);
 		Auth auth = Auth.create(qiNiuConfig.getAccessKey(),
 				qiNiuConfig.getSecretKey());
@@ -57,6 +59,44 @@ public class QiNiuService {
 			ex.printStackTrace();
 		}
 		return signedUrl;
+	}
+
+	public String uploadToken(String fileName) {
+		Auth auth = Auth.create(qiNiuConfig.getAccessKey(),
+				qiNiuConfig.getSecretKey());
+		return auth.uploadToken(qiNiuConfig.getBucket(), fileName);
+	}
+
+	public String upload(InputStream inputStream,String fileKey, String extension) {
+
+		this.uploadFile(inputStream, fileKey);
+
+		return this.getHttpsFullResourceName(fileKey);
+	}
+
+	public String getHttpsFullResourceName(String resourceName) {
+		String dm = qiNiuConfig.getDomain();
+		if (StringUtils.isNotEmpty(dm)
+				&& StringUtils.isNotEmpty(resourceName)) {
+			if (resourceName.startsWith("http://")) {
+				return resourceName;
+			}
+			if (resourceName.startsWith("https://")) {
+				return resourceName;
+			}
+			if (!resourceName.startsWith("/")) {
+				resourceName = "/" + resourceName;
+			}
+			if (!dm.startsWith("http://") && !dm.startsWith("https://")) {
+				dm = "https://" + dm;
+			}
+			return dm + resourceName;
+		}
+		return "";
+	}
+
+	public String getDomain() {
+		return qiNiuConfig.getDomain();
 	}
 
 	public static void main(String[] args) {
