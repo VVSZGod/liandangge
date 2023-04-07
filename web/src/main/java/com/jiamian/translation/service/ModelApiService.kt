@@ -111,8 +111,8 @@ class ModelApiService {
                     imagesApiDTO.url = meta!!.qiniuUrl + "?imageView2/2/w/100"
                     imagesApiDTO.nsfw = false
                     val imgInfo = getImgInfo(meta.qiniuUrl)
-                    val width = imgInfo.getIntValue("width").or(56)
-                    val height = imgInfo.getIntValue("height").or(56)
+                    val width = meta.width
+                    val height = meta.height
                     imagesApiDTO.width = width
                     imagesApiDTO.height = height
                     val metaApiDTO = MetaApiDTO()
