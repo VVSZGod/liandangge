@@ -23,6 +23,8 @@ import java.util.*
  */
 @Service
 class ModelApiService {
+    private val log = LoggerFactory.getLogger(this.javaClass)
+
     @Autowired
     private lateinit var modelRepository: ModelRepository
 
@@ -127,7 +129,7 @@ class ModelApiService {
                         imagesApiDTO.meta = metaApiDTO
                         images.add(imagesApiDTO)
                     } catch (e: Exception) {
-
+                        log.error("图片处理异常", e)
                     }
 
                 }
