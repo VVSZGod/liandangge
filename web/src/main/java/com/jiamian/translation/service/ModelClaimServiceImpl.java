@@ -30,7 +30,7 @@ public class ModelClaimServiceImpl {
 		ModelCreator modelCreator = modelCreatorService
 				.selectOneModelByModelId(modelClaimReq.getModelId());
 		if (ObjectUtil.isNotNull(modelCreator)
-				&& modelCreator.getUid() != null) {
+				&& modelCreator.getUid() == null) {
 			ModelClaim modelClaim = new ModelClaim();
 			BeanUtil.copyProperties(modelClaimReq, modelClaim);
 			modelClaim.setUserId(userId);
