@@ -436,7 +436,8 @@ public class ModeServiceImpl {
 	}
 
 	public List<ModelResponse> modelListVersion(Long modelId) {
-		List<Model> modelList = modelRepository.findByModelId(modelId);
+		List<Model> modelList = modelRepository.findByModelIdAndStatus(modelId,
+				YesOrNo.YES.value());
 		return modelList.stream().map(model -> {
 			ModelResponse modelResponse = new ModelResponse();
 			BeanUtil.copyProperties(model, modelResponse);

@@ -21,7 +21,7 @@ public interface ModelRepository
 	Optional<Model> findByModelIdAndStatusAndModelVersionId(Long modelId,
 			Integer status, Long modelVersionId);
 
-	List<Model> findByModelId(Long modelId);
+	List<Model> findByModelIdAndStatus(Long modelId,Integer status);
 
 	@Query(nativeQuery = true, value = "select count(*) from model where status=1 and ali_url!=''")
 	int selectModelUploadCount();
