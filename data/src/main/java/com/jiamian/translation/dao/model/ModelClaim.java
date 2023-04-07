@@ -14,25 +14,27 @@ import java.time.LocalDateTime;
 @DynamicUpdate
 @Table(name = "model_claim")
 public class ModelClaim implements Serializable {
-	public static final long serialVersionUID = 8526667501911991004L;
+	public static final long serialVersionUID = 3961873070026011313L;
 	private Long id;
 	private String title;
 	private String content;
 	private String url;
 	private Integer status;
 	private Long userId;
+	private Long modelId;
 	private LocalDateTime createTime;
 
 	public ModelClaim() {
 	}
 
 	public ModelClaim(String title, String content, String url, Integer status,
-			Long userId, LocalDateTime createTime) {
+			Long userId, Long modelId, LocalDateTime createTime) {
 		this.title = title;
 		this.content = content;
 		this.url = url;
 		this.status = status;
 		this.userId = userId;
+		this.modelId = modelId;
 		this.createTime = createTime;
 	}
 
@@ -90,6 +92,15 @@ public class ModelClaim implements Serializable {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	@Column(name = "model_id")
+	public Long getModelId() {
+		return modelId;
+	}
+
+	public void setModelId(Long modelId) {
+		this.modelId = modelId;
 	}
 
 	@Column(name = "create_time", updatable = false)

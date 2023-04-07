@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @DynamicUpdate
 @Table(name = "work_order")
 public class WorkOrder implements Serializable {
-	public static final long serialVersionUID = 6500544622974874995L;
+	public static final long serialVersionUID = 1295313425336706484L;
 	private Long id;
 	private String title;
 	private String type;

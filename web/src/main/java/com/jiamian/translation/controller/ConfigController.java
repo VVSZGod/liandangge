@@ -1,5 +1,6 @@
 package com.jiamian.translation.controller;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.jiamian.translation.exception.BOException;
 import com.jiamian.translation.exception.ErrorMsg;
 import com.jiamian.translation.request.ModelClaimReq;
@@ -58,6 +59,9 @@ public class ConfigController {
 		UserTokenUtil.needLogin(userId);
 		if (modelClaimReq.getTitle().isEmpty()
 				|| modelClaimReq.getTitle().length() > 49) {
+			throw new BOException(ErrorMsg.PARAMETER_ERROR);
+		}
+		if (ObjectUtil.isNull(modelClaimReq.getModelId())) {
 			throw new BOException(ErrorMsg.PARAMETER_ERROR);
 		}
 		modelClaimService.createModelClaim(modelClaimReq, userId);

@@ -315,7 +315,6 @@ public class ModeServiceImpl {
 				modelResponse.setModelId(modelId);
 				modelResponse.setName(modelName);
 				modelResponse.setCreateDate(createDate);
-				modelResponse.setDescription(description);
 				modelResponse.setType(type);
 				modelResponse.setDownloadCount(downloadCount);
 				modelResponse.setRating(rating);

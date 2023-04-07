@@ -1,6 +1,7 @@
 package com.jiamian.translation.dao.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.jiamian.translation.dao.model.ModelType;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,4 +21,7 @@ public interface ModelCreatorRepository
 
 	@Query(nativeQuery = true, value = "select model_id from model_creator where username like %:userName%")
 	List<Long> selectModelByUserName(String userName);
+
+	@Query(nativeQuery = true, value = "select * from model_creator where model_id=:modelId")
+	Optional<ModelCreator> selectOneModelByModelId(Long modelId);
 }

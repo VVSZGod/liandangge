@@ -13,4 +13,6 @@ public class ModelClaimReq {
 
 	private String url;
 
+	private Long modelId;
+
 }
