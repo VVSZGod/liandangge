@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject
 import com.jiamian.translation.service.ModelApiService
 import io.swagger.annotations.Api
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -16,14 +17,14 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api")
 @Api(tags = ["公开api"])
-class ModelApiController {
+open class ModelApiController {
 
     @Autowired
     lateinit var modelApiService: ModelApiService;
 
 
     @GetMapping("/models")
-    fun pageModel(@RequestParam(value = "page") page: Int, @RequestParam(value = "limit") pageSize: Int): String {
+     fun pageModel(@RequestParam(value = "page") page: Int, @RequestParam(value = "limit") pageSize: Int): String {
         return JSONObject.toJSONString(modelApiService.pageModelApi(pageSize, page))
     }
 }
