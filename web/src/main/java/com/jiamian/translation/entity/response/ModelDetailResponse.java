@@ -18,7 +18,6 @@ import lombok.Data;
 @ApiModel(value = "模型详情")
 public class ModelDetailResponse extends ModelResponse{
 
-
 	private List<MetaDTO> metaDTOList;
 
 
@@ -28,7 +27,8 @@ public class ModelDetailResponse extends ModelResponse{
 
 	private String baseModel;
 
-	private String version;
+	private List<ModelResponse> modelVersionList;
 
+	private String description;
 
 }

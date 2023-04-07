@@ -31,8 +31,6 @@ public class ModelResponse {
 
 	private String imageUrl;
 
-	private String description;
-
 	private Integer downloadCount;
 
 	private String rating;
@@ -58,5 +56,7 @@ public class ModelResponse {
 	private Integer recommend;
 
 	private Integer status;
+
+	private String version;
 
 }

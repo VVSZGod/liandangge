@@ -69,6 +69,8 @@ public class ModelController {
 			@RequestParam(value = "modelVersionId") Long modelVersionId) {
 		ModelDetailResponse modelDetailResponse = modeService
 				.modelDetail(userId, modelId.longValue(), modelVersionId);
+		modelDetailResponse.setModelVersionList(
+				modeService.modelListVersion(modelId.longValue()));
 		return JsonResult.succResult(modelDetailResponse);
 	}
 
@@ -124,12 +126,4 @@ public class ModelController {
 		return JsonResult.succResult(modelResponsePage);
 	}
 
-	@GetMapping("/list/version")
-	@ApiOperation("查找模型版本列表")
-	public JsonResult<List<ModelResponse>> modelListVersion(
-			@RequestParam(value = "modelId") Long modelId) {
-		List<ModelResponse> modelResponses = modeService
-				.modelListVersion(modelId);
-		return JsonResult.succResult(modelResponses);
-	}
 }
