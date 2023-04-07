@@ -376,7 +376,10 @@ public class ModeServiceImpl {
 			String headThumb = modelCreators.get(0).getImage();
 			Long uid = modelCreators.get(0).getUid();
 			modelResponse.setCreatorUserName(username);
-			modelResponse.setCreatorHeadThumb(headThumb+ "-mshalf");
+			modelResponse.setCreatorHeadThumb(headThumb);
+			if (headThumb.startsWith("https://msdn.miaoshouai.com")) {
+				modelResponse.setCreatorHeadThumb(headThumb + "-mshalf");
+			}
 			modelResponse.setModelClaimStat(uid != null);
 			modelResponse
 					.setCreatorLink(String.format(C_CREATOR_LINK, username));
