@@ -306,7 +306,7 @@ public class ModeServiceImpl {
 				} catch (Exception e) {
 					log.info(e.getMessage());
 				}
-				Long modelVersionId =Long.parseLong(value[5].toString()) ;
+				Long modelVersionId = Long.parseLong(value[5].toString());
 				int downloadCount = Integer.parseInt(value[6].toString());
 				String rating = value[7].toString();
 				int ldgDownloadCount = Integer.parseInt(value[8].toString());
@@ -374,8 +374,10 @@ public class ModeServiceImpl {
 		if (CollectionUtil.isNotEmpty(modelCreators)) {
 			String username = modelCreators.get(0).getUsername();
 			String headThumb = modelCreators.get(0).getImage();
+			Long uid = modelCreators.get(0).getUid();
 			modelResponse.setCreatorUserName(username);
-			modelResponse.setCreatorHeadThumb(headThumb);
+			modelResponse.setCreatorHeadThumb(headThumb+ "-mshalf");
+			modelResponse.setModelClaimStat(uid != null);
 			modelResponse
 					.setCreatorLink(String.format(C_CREATOR_LINK, username));
 		}

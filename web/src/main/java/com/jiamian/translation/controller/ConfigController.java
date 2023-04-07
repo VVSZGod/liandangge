@@ -42,11 +42,11 @@ public class ConfigController {
 		UserTokenUtil.needLogin(userId);
 		if (workOrderReq.getTitle().isEmpty()
 				|| workOrderReq.getTitle().length() > 49) {
-			throw new BOException(ErrorMsg.PARAMETER_ERROR);
+			throw new BOException("标题" + ErrorMsg.PARAMETER_LONG_ERROR);
 		}
 		if (workOrderReq.getType().isEmpty()
 				|| workOrderReq.getType().length() > 19) {
-			throw new BOException(ErrorMsg.PARAMETER_ERROR);
+			throw new BOException("类型" + ErrorMsg.PARAMETER_LONG_ERROR);
 		}
 		workOrderService.createWorkOrder(workOrderReq, userId);
 		return JsonResult.succResult();
@@ -59,10 +59,10 @@ public class ConfigController {
 		UserTokenUtil.needLogin(userId);
 		if (modelClaimReq.getTitle().isEmpty()
 				|| modelClaimReq.getTitle().length() > 49) {
-			throw new BOException(ErrorMsg.PARAMETER_ERROR);
+			throw new BOException("标题" + ErrorMsg.PARAMETER_LONG_ERROR);
 		}
 		if (ObjectUtil.isNull(modelClaimReq.getModelId())) {
-			throw new BOException(ErrorMsg.PARAMETER_ERROR);
+			throw new BOException("模型id不能为空");
 		}
 		modelClaimService.createModelClaim(modelClaimReq, userId);
 		return JsonResult.succResult();

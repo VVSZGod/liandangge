@@ -59,4 +59,6 @@ public class ModelResponse {
 
 	private String version;
 
+	private boolean modelClaimStat;
+
 }
