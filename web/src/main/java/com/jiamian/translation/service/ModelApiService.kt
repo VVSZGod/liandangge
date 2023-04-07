@@ -2,14 +2,14 @@ package com.jiamian.translation.service
 
 import cn.hutool.core.collection.CollectionUtil
 import com.google.common.collect.Lists
+import com.jiamian.translation.dao.model.Model
 import com.jiamian.translation.dao.repository.MetaRepository
 import com.jiamian.translation.dao.repository.ModelCreatorRepository
 import com.jiamian.translation.dao.repository.ModelRepository
 import com.jiamian.translation.dao.repository.ModelTagsRepository
 import com.jiamian.translation.entity.dto.api.*
-import com.jiamian.translation.dao.model.Model
-import com.jiamian.translation.util.QiniuUtil.getImgInfo
 import org.apache.commons.lang3.ObjectUtils
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Example
 import org.springframework.data.domain.PageRequest
@@ -107,24 +107,29 @@ class ModelApiService {
             val images: MutableList<ImagesApiDTO> = Lists.newArrayList()
             if (CollectionUtil.isNotEmpty(metas)) {
                 for (meta in metas) {
-                    val imagesApiDTO = ImagesApiDTO()
-                    imagesApiDTO.url = meta!!.qiniuUrl + "?imageView2/2/w/100"
-                    imagesApiDTO.nsfw = false
-                    val width = meta.width
-                    val height = meta.height
-                    imagesApiDTO.width = width
-                    imagesApiDTO.height = height
-                    val metaApiDTO = MetaApiDTO()
-                    metaApiDTO.Size = width.toString() + "x" + height
-                    metaApiDTO.seed = meta.seed.toLong()
-                    metaApiDTO.Model = dbModel.name
-                    metaApiDTO.steps = meta.steps.toInt()
-                    metaApiDTO.prompt = meta.prompt
-                    metaApiDTO.sampler = meta.sampler
-                    metaApiDTO.cfgScale = meta.cfgScale.toDouble()
-                    metaApiDTO.negativePrompt = meta.negativePrompt
-                    imagesApiDTO.meta = metaApiDTO
-                    images.add(imagesApiDTO)
+                    try {
+                        val imagesApiDTO = ImagesApiDTO()
+                        imagesApiDTO.url = meta!!.qiniuUrl + "?imageView2/2/w/100"
+                        imagesApiDTO.nsfw = false
+                        val width = meta.width ?: 0
+                        val height = meta.height ?: 0
+                        imagesApiDTO.width = width
+                        imagesApiDTO.height = height
+                        val metaApiDTO = MetaApiDTO()
+                        metaApiDTO.Size = width.toString() + "x" + height
+                        metaApiDTO.seed = meta.seed.toLong()
+                        metaApiDTO.Model = dbModel.name
+                        metaApiDTO.steps = meta.steps.toInt()
+                        metaApiDTO.prompt = meta.prompt
+                        metaApiDTO.sampler = meta.sampler
+                        metaApiDTO.cfgScale = meta.cfgScale.toDouble()
+                        metaApiDTO.negativePrompt = meta.negativePrompt
+                        imagesApiDTO.meta = metaApiDTO
+                        images.add(imagesApiDTO)
+                    } catch (e: Exception) {
+
+                    }
+
                 }
             }
             mvDTO.images = images
