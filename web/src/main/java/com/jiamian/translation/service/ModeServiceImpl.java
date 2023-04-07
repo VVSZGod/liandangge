@@ -306,13 +306,14 @@ public class ModeServiceImpl {
 				} catch (Exception e) {
 					log.info(e.getMessage());
 				}
-				String description = value[5].toString();
+				Long modelVersionId =Long.parseLong(value[5].toString()) ;
 				int downloadCount = Integer.parseInt(value[6].toString());
 				String rating = value[7].toString();
 				int ldgDownloadCount = Integer.parseInt(value[8].toString());
 				String alUrl = value[9].toString();
 				modelResponse.setId(id);
 				modelResponse.setModelId(modelId);
+				modelResponse.setModelVersionId(modelVersionId);
 				modelResponse.setName(modelName);
 				modelResponse.setCreateDate(createDate);
 				modelResponse.setType(type);
