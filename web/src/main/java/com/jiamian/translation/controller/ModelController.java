@@ -2,6 +2,7 @@ package com.jiamian.translation.controller;
 
 import java.util.Map;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.jiamian.translation.enums.ModelTagEnum;
 import com.jiamian.translation.entity.response.ModelTagResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,9 @@ public class ModelController {
 			@RequestParam(value = "chine", required = false) @ApiParam("华人(不查不传) 1") Integer chine,
 			@RequestParam(value = "recommend", required = false) @ApiParam("推荐(不查不传) 1") Integer recommend,
 			@LoginUser Long userId) {
+		if (ObjectUtil.isNotNull(chine) || ObjectUtil.isNotNull(recommend)) {
+			type = "";
+		}
 		userId = UserTokenUtil.createUserId(userId);
 		Page<ModelResponse> modelResponsePage = modeService.pageModel(pageNo,
 				pageSize, key, type, sortType, userId, chine, recommend);
