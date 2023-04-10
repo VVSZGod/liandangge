@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController
  */
 @RestController
 @RequestMapping("/api")
+
 @Api(tags = ["公开api"])
 open class ModelApiController {
 

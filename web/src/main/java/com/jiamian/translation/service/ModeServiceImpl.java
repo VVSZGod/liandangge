@@ -311,6 +311,7 @@ public class ModeServiceImpl {
 				String rating = value[7].toString();
 				int ldgDownloadCount = Integer.parseInt(value[8].toString());
 				String alUrl = value[9].toString();
+				String desc = value[10].toString();
 				modelResponse.setId(id);
 				modelResponse.setModelId(modelId);
 				modelResponse.setModelVersionId(modelVersionId);
@@ -319,6 +320,7 @@ public class ModeServiceImpl {
 				modelResponse.setType(type);
 				modelResponse.setDownloadCount(downloadCount);
 				modelResponse.setRating(rating);
+				modelResponse.setDescription(desc);
 				this.setModelData(modelResponse, alUrl, userId,
 						ldgDownloadCount);
 				listModel.add(modelResponse);

@@ -25,7 +25,7 @@ public class ModelServiceDao {
 		StringBuilder sql = new StringBuilder();
 		StringBuilder sqlCount = new StringBuilder();
 		sql.append(
-				" select m.id,m.model_id,m.name,m.type,m.create_date,m.model_version_id,m.downloadCount,m.rating,m.ldg_download_count,m.ali_url from  model m left join model_tags t on m.model_id=t.model_id"
+				" select m.id,m.model_id,m.name,m.type,m.create_date,m.model_version_id,m.downloadCount,m.rating,m.ldg_download_count,m.ali_url,m.description from  model m left join model_tags t on m.model_id=t.model_id"
 						+ " where m.status=1 and LOWER(t.tagText) like '%")
 				.append(tag).append("%' ");
 		sqlCount.append(
