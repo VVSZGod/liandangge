@@ -393,7 +393,7 @@ public class ModeServiceImpl {
 					sqlCount.append(aLong).append(",");
 				}
 				sql.delete(sql.length() - 1, sql.length());
-				sqlCount.delete(sql.length() - 1, sql.length());
+				sqlCount.delete(sqlCount.length() - 1, sqlCount.length());
 				sql.append(")");
 				sqlCount.append(")");
 			}
