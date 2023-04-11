@@ -11,11 +11,15 @@ import com.jiamian.translation.entity.dto.api.*
 import org.apache.commons.lang3.ObjectUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.domain.Example
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
+import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
 import java.util.*
+import javax.persistence.criteria.CriteriaBuilder
+import javax.persistence.criteria.CriteriaQuery
+import javax.persistence.criteria.Predicate
+import javax.persistence.criteria.Root
 
 /**
  * @author DingGuangHui
@@ -42,17 +46,20 @@ class ModelApiService {
      * 当前model信息构造json上传七牛云
      */
     fun pageModelApi(pageSize: Int, pageIdx: Int): ApiResp {
-        val example = Model()
-        example.status = 1
+
+        val specification = Specification { root: Root<Model?>, criteriaQuery: CriteriaQuery<*>?, cb: CriteriaBuilder ->
+            val predicates: MutableList<Predicate> = Lists.newArrayList()
+            predicates.add(cb.equal(root.get<Any>("status"), 1))
+            predicates.add(cb.isNotEmpty(root.get("model_url")))
+            cb.and(*predicates.toTypedArray())
+        }
+
 
         val item: MutableList<ModelApiDTO> = Lists.newArrayList()
 
         val p = modelRepository.findAll(
-            Example.of(example),
-            PageRequest.of(
-                pageIdx, pageSize, Sort.Direction.ASC,
-                "id"
-            )
+                specification,
+                PageRequest.of(pageIdx, pageSize, Sort.Direction.ASC, "id")
         )
 
         for (dbModel in p.content) {
@@ -63,8 +70,8 @@ class ModelApiService {
             var trainedWords = ""
             var baseModel = ""
             val downloadUrl = String.format(
-                MODEL_DETAIL_URL,
-                dbModel.modelId
+                    MODEL_DETAIL_URL,
+                    dbModel.modelId
             )
 
 
@@ -87,13 +94,13 @@ class ModelApiService {
 
 
             val modelTags = modelTagsRepository
-                .findByModelId(dbModel.modelId)
+                    .findByModelId(dbModel.modelId)
             if (CollectionUtil.isNotEmpty(modelTags)) {
                 val modelT = modelTags[0]
                 val tags = modelT!!.tagText
                 trainedWords = if (ObjectUtils.isNotEmpty(
-                        modelT.trainedWords
-                    )
+                                modelT.trainedWords
+                        )
                 ) modelT.trainedWords else ""
                 baseModel = modelT.baseModel
                 modelApiDTO.tags = Arrays.asList(*tags.split(",".toRegex()).toTypedArray())
@@ -113,7 +120,7 @@ class ModelApiService {
             filesApiDTO.downloadUrl = downloadUrl
             mvDTO.files = Lists.newArrayList(filesApiDTO)
             val metas = metaRepository
-                .findByModelIdAndModelVersionId(dbModel.modelId, dbModel.modelVersionId)
+                    .findByModelIdAndModelVersionId(dbModel.modelId, dbModel.modelVersionId)
             val images: MutableList<ImagesApiDTO> = Lists.newArrayList()
             if (CollectionUtil.isNotEmpty(metas)) {
                 for (meta in metas) {
