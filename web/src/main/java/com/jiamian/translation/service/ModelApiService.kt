@@ -48,13 +48,14 @@ class ModelApiService {
     fun pageModelApi(pageSize: Int, pageIdx: Int): ApiResp {
 
         val specification = Specification { root: Root<Model?>, criteriaQuery: CriteriaQuery<*>?, cb: CriteriaBuilder ->
-//            val predicates: MutableList<Predicate> = Lists.newArrayList()
-//            predicates.add(cb.equal(root.get<Any>("status"), 1))
-//            predicates.add(cb.isNotEmpty(root.get("modelUrl")))
-//            var array = arrayOf<Predicate>()
-//            array.
+            val predicates: MutableList<Predicate> = Lists.newArrayList()
+            predicates.add(cb.equal(root.get<Any>("status"), 1))
 
-            cb.and(cb.equal(root.get<Any>("status"), 1),cb.isNotEmpty(root.get("modelUrl")))
+            val modelUrl = root.get<Any>("modelUrl")
+            predicates.add(cb.isNotNull(modelUrl))
+            predicates.add(cb.not(cb.equal(modelUrl,"")))
+
+            cb.and(*predicates.toTypedArray())
         }
 
 
