@@ -61,4 +61,8 @@ public class ModelResponse {
 
 	private boolean modelClaimStat;
 
+	private String description;
+
+	private boolean clickStat;
+
 }

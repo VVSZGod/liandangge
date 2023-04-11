@@ -29,6 +29,4 @@ public class ModelDetailResponse extends ModelResponse{
 
 	private List<ModelResponse> modelVersionList;
 
-	private String description;
-
 }

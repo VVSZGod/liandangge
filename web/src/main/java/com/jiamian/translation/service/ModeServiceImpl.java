@@ -4,8 +4,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
@@ -87,93 +91,27 @@ public class ModeServiceImpl {
 	@Autowired
 	private ModelCreatorServiceImpl modelCreatorService;
 
+	@PersistenceContext
+	EntityManager entityManager;
+
 	@Transactional(rollbackFor = Exception.class)
 	public Page<ModelResponse> pageModel(Integer pageNo, Integer pageSize,
 			String key, String type, Integer sortType, Long userId,
 			Integer chine, Integer recommend) {
-		PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
-		Specification<Model> specification = (Specification<Model>) (root,
-				criteriaQuery, cb) -> {
-			List<Predicate> predicates = Lists.newArrayList();
-			List<Predicate> predicatesOr = Lists.newArrayList();
-			List<Order> list = new ArrayList<>();
-			predicates.add(cb.equal(root.get("status"), YesOrNo.YES.value()));
-			if (ObjectUtil.isNotEmpty(key)) {
-				predicatesOr.add(cb.like(root.get("name"), "%" + key + "%"));
-				try {
-					predicatesOr.add(
-							cb.equal(root.get("modelId"), Long.parseLong(key)));
-				} catch (Exception e) {
-					log.info("message{}===id{}", e.getMessage(), key);
-				}
-				List<Long> longs = modelCreatorService
-						.searchModelByUserName(key);
-				if (CollectionUtil.isNotEmpty(longs)) {
-					CriteriaBuilder.In<Object> modelId = cb
-							.in(root.get("modelId"));
-					for (Long a : longs) {
-						modelId.value(a);
-					}
-					predicatesOr.add(modelId);
-				}
-				predicates.add(cb.or(predicatesOr.toArray(new Predicate[] {})));
-			}
-			if (StringUtils.isNotEmpty(type)) {
-				if (type.equals("Other")) {
-					List<ModelTypeResponse> modelTypeResponses = modelTypeService
-							.notShowModelTypeResponseList();
-					CriteriaBuilder.In<Object> types = cb.in(root.get("type"));
-					types.value("Other");
-					for (ModelTypeResponse modelTypeResponse : modelTypeResponses) {
-						types.value(modelTypeResponse.getType());
-					}
-					predicates.add(types);
-				} else {
-					predicates.add(cb.equal(root.get("type"), type));
-				}
-			}
-			if (ObjectUtil.isNotNull(chine)) {
-				predicates.add(
-						cb.equal(root.get("chinese"), YesOrNo.YES.value()));
-			}
-			if (ObjectUtil.isNotNull(recommend)) {
-				predicates.add(
-						cb.equal(root.get("recommend"), YesOrNo.YES.value()));
-			}
-			if (SortTypeEnum.DOWN_COUNT.value().equals(sortType)) {
-				list.add(cb.desc(cb.sum(root.get("downloadCount"),
-						root.get("ldgDownloadCount"))));
-			} else if (SortTypeEnum.TIME.value().equals(sortType)) {
-				list.add((cb.desc(root.get("createDate"))));
-			} else {
-				list.add(cb.desc(root.get("rating")));
-			}
-			list.add(cb.desc(root.get("modelId")));
-			criteriaQuery.orderBy(list);
-			return cb.and(predicates.toArray(new Predicate[] {}));
-		};
-		org.springframework.data.domain.Page<ModelResponse> rs = modelRepository
-				.findAll(specification, pageRequest)
-				.map(new Function<Model, ModelResponse>() {
-					@Override
-					public ModelResponse apply(Model model) {
-						ModelResponse modelResponse = new ModelResponse();
-						BeanUtils.copyProperties(model, modelResponse);
-						setModelData(modelResponse, model.getAliUrl(), userId,
-								model.getLdgDownloadCount());
-						modelResponse
-								.setCreateDate(model.getCreateDate() == null
-										? LocalDateTime.of(2020, 2, 2, 2, 2)
-										: model.getCreateDate());
-						return modelResponse;
-					}
-				});
 		com.jiamian.translation.entity.Page<ModelResponse> p = new com.jiamian.translation.entity.Page<>();
-		p.setList(Lists.newArrayList(rs.getContent()));
+		List<ModelResponse> listModel = new ArrayList<>();
+		JSONObject jsonObject = this.searchModelList(pageNo, pageSize, key,
+				type, sortType, userId, chine, recommend);
+		int count = Integer.parseInt(jsonObject.get("count").toString());
+		List<Object[]> list = (List<Object[]>) jsonObject.get("list");
+		if (CollectionUtil.isNotEmpty(list)) {
+			this.wrapModelList(list, listModel, userId);
+		}
+		p.setTotalRecords(count);
 		p.setPageNo(pageNo);
 		p.setPageSize(pageSize);
-		p.setTotalPages(rs.getTotalPages());
-		p.setTotalRecords((int) rs.getTotalElements());
+		p.setList(listModel);
+		p.setTotalPages((count - 1) / pageSize + 1);
 		return p;
 	}
 
@@ -290,39 +228,7 @@ public class ModeServiceImpl {
 		int count = Integer.parseInt(modelListByTag.get("count").toString());
 		List<Object[]> list = (List<Object[]>) modelListByTag.get("list");
 		if (CollectionUtil.isNotEmpty(list)) {
-			for (Object[] value : list) {
-				ModelResponse modelResponse = new ModelResponse();
-				Long id = Long.parseLong(value[0].toString());
-				Long modelId = Long.parseLong(value[1].toString());
-				String modelName = value[2].toString();
-				String type = value[3].toString();
-				LocalDateTime createDate = LocalDateTime.of(2020, 2, 2, 2, 2);
-				try {
-					if (ObjectUtil.isNotNull(value[4])) {
-						createDate = LocalDateTime.parse(
-								value[4].toString().substring(0, 19),
-								dateTimeFormatter);
-					}
-				} catch (Exception e) {
-					log.info(e.getMessage());
-				}
-				Long modelVersionId = Long.parseLong(value[5].toString());
-				int downloadCount = Integer.parseInt(value[6].toString());
-				String rating = value[7].toString();
-				int ldgDownloadCount = Integer.parseInt(value[8].toString());
-				String alUrl = value[9].toString();
-				modelResponse.setId(id);
-				modelResponse.setModelId(modelId);
-				modelResponse.setModelVersionId(modelVersionId);
-				modelResponse.setName(modelName);
-				modelResponse.setCreateDate(createDate);
-				modelResponse.setType(type);
-				modelResponse.setDownloadCount(downloadCount);
-				modelResponse.setRating(rating);
-				this.setModelData(modelResponse, alUrl, userId,
-						ldgDownloadCount);
-				listModel.add(modelResponse);
-			}
+			this.wrapModelList(list, listModel, userId);
 		}
 		p.setTotalRecords(count);
 		p.setPageNo(pageNo);
@@ -358,9 +264,11 @@ public class ModeServiceImpl {
 					Integer height = imageInfo.getInteger("height");
 					modelResponse.setImageHeight(height);
 					modelResponse.setImageWidth(width);
-					meta.setHeight(height);
-					meta.setWidth(width);
-					metaRepository.save(meta);
+					if (ObjectUtil.isNotNull(width)) {
+						meta.setHeight(height);
+						meta.setWidth(width);
+						metaRepository.save(meta);
+					}
 				}
 			}
 		}
@@ -446,7 +354,127 @@ public class ModeServiceImpl {
 		return modelList.stream().map(model -> {
 			ModelResponse modelResponse = new ModelResponse();
 			BeanUtil.copyProperties(model, modelResponse);
+			modelResponse.setClickStat(true);
+			if (model.getAliUrl().isEmpty()) {
+				modelResponse.setClickStat(false);
+			}
 			return modelResponse;
 		}).collect(Collectors.toList());
+	}
+
+	public JSONObject searchModelList(Integer pageNo, Integer pageSize,
+			String key, String type, Integer sortType, Long userId,
+			Integer chine, Integer recommend) {
+		JSONObject jsonObject = new JSONObject();
+		int firstResult;
+		pageNo = pageSize * pageNo;
+		StringBuilder sql = new StringBuilder();
+		sql.append(" select model_id,");
+		if (SortTypeEnum.DOWN_COUNT.value().equals(sortType)) {
+			sql.append(" (downloadCount+ldg_download_count)");
+		} else if (SortTypeEnum.TIME.value().equals(sortType)) {
+			sql.append(" create_date");
+		} else {
+			sql.append(" rating");
+		}
+		sql.append(" from  model m where status=1 ");
+		StringBuilder sqlCount = new StringBuilder();
+		sqlCount.append(
+				" select count(*) from (select count(*) from model where status=1");
+		if (StringUtils.isNotEmpty(key)) {
+			sql.append(" and (name like '%").append(key).append("%' ");
+			sqlCount.append(" and (name like '%").append(key).append("%' ");
+			if (isNumeric(key)) {
+				sql.append(" or model_id=").append(Long.parseLong(key));
+				sqlCount.append(" or model_id=").append(Long.parseLong(key));
+			}
+			List<Long> longs = modelCreatorService.searchModelByUserName(key);
+			if (CollectionUtil.isNotEmpty(longs)) {
+				sql.append(" or model_id in(");
+				sqlCount.append(" or model_id in(");
+				for (Long aLong : longs) {
+					sql.append(aLong).append(",");
+					sqlCount.append(aLong).append(",");
+				}
+				sql.delete(sql.length() - 1, sql.length());
+				sqlCount.delete(sqlCount.length() - 1, sqlCount.length());
+				sql.append(")");
+				sqlCount.append(")");
+			}
+			sql.append(" )");
+			sqlCount.append(" )");
+		}
+		if (StringUtils.isNotEmpty(type)) {
+			if (type.equals("Other")) {
+				sql.append(" and type in('").append("Other',");
+				sqlCount.append(" and type in('").append("Other',");
+				List<ModelTypeResponse> modelTypeResponses = modelTypeService
+						.notShowModelTypeResponseList();
+				if (CollectionUtil.isNotEmpty(modelTypeResponses)) {
+					for (ModelTypeResponse modelTypeResponse : modelTypeResponses) {
+						sql.append("'").append(modelTypeResponse.getType())
+								.append("',");
+						sqlCount.append("'").append(modelTypeResponse.getType())
+								.append("',");
+					}
+					sql.delete(sql.length() - 1, sql.length());
+					sqlCount.delete(sqlCount.length() - 1, sqlCount.length());
+					sql.append(")");
+					sqlCount.append(")");
+				}
+			} else {
+				sql.append(" and type='").append(type).append("'");
+				sqlCount.append(" and type='").append(type).append("'");
+			}
+		}
+		if (ObjectUtil.isNotNull(chine)) {
+			sql.append(" and chinese=").append(chine);
+			sqlCount.append(" and chinese=").append(chine);
+		}
+		if (ObjectUtil.isNotNull(recommend)) {
+			sql.append(" and recommend=").append(recommend);
+			sqlCount.append(" and recommend=").append(recommend);
+		}
+		sqlCount.append(" group by model_id").append(") a");
+		if (SortTypeEnum.DOWN_COUNT.value().equals(sortType)) {
+			sql.append(" group by model_id,(downloadCount+ldg_download_count)");
+			sql.append(
+					" order by (downloadCount+ldg_download_count) desc ,model_id desc");
+		} else if (SortTypeEnum.TIME.value().equals(sortType)) {
+			sql.append(" group by model_id,create_date");
+			sql.append(" order by create_date desc ,model_id desc");
+		} else {
+			sql.append(" group by model_id,rating");
+			sql.append(" order by rating desc ,model_id desc ");
+		}
+		sql.append(" limit ").append(pageNo).append(",").append(pageSize);
+		Query query = entityManager.createNativeQuery(sql.toString());
+		List<Object[]> resultList = query.getResultList();
+		Query queryCount = entityManager.createNativeQuery(sqlCount.toString());
+		firstResult = Integer.parseInt(queryCount.getSingleResult().toString());
+		jsonObject.put("count", firstResult);
+		jsonObject.put("list", resultList);
+		return jsonObject;
+	}
+
+	public static boolean isNumeric(String str) {
+		Pattern pattern = Pattern.compile("[0-9]*");
+		return pattern.matcher(str).matches();
+	}
+
+	private void wrapModelList(List<Object[]> list,
+			List<ModelResponse> listModel, Long userId) {
+		for (Object[] value : list) {
+			ModelResponse modelResponse = new ModelResponse();
+			Long modelId = Long.parseLong(value[0].toString());
+			Model model = modelRepository.selectModelByModelId(modelId).get();
+			BeanUtil.copyProperties(model, modelResponse);
+			modelResponse.setCreateDate(model.getCreateDate() == null
+					? LocalDateTime.of(2020, 2, 2, 2, 2)
+					: model.getCreateDate());
+			this.setModelData(modelResponse, model.getAliUrl(), userId,
+					model.getLdgDownloadCount());
+			listModel.add(modelResponse);
+		}
 	}
 }
