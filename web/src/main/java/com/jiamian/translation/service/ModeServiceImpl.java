@@ -395,6 +395,8 @@ public class ModeServiceImpl {
 				sql.append(")");
 				sqlCount.append(")");
 			}
+			sql.append(" )");
+			sqlCount.append(" )");
 		}
 		if (StringUtils.isNotEmpty(type)) {
 			if (type.equals("Other")) {
