@@ -400,24 +400,25 @@ public class ModeServiceImpl {
 		}
 		if (StringUtils.isNotEmpty(type)) {
 			if (type.equals("Other")) {
-				sql.append(" and type in(").append("Other,");
-				sqlCount.append(" and type in(").append("Other,");
+				sql.append(" and type in('").append("Other',");
+				sqlCount.append(" and type in('").append("Other',");
 				List<ModelTypeResponse> modelTypeResponses = modelTypeService
 						.notShowModelTypeResponseList();
 				if (CollectionUtil.isNotEmpty(modelTypeResponses)) {
 					for (ModelTypeResponse modelTypeResponse : modelTypeResponses) {
-						sql.append(modelTypeResponse.getType()).append(",");
-						sqlCount.append(modelTypeResponse.getType())
-								.append(",");
+						sql.append("'").append(modelTypeResponse.getType())
+								.append("',");
+						sqlCount.append("'").append(modelTypeResponse.getType())
+								.append("',");
 					}
 					sql.delete(sql.length() - 1, sql.length());
-					sqlCount.delete(sql.length() - 1, sql.length());
+					sqlCount.delete(sqlCount.length() - 1, sqlCount.length());
 					sql.append(")");
 					sqlCount.append(")");
 				}
 			} else {
-				sql.append(" and type=").append(type);
-				sqlCount.append(" and type=").append(type);
+				sql.append(" and type='").append(type).append("'");
+				sqlCount.append(" and type='").append(type).append("'");
 			}
 		}
 		if (ObjectUtil.isNotNull(chine)) {
@@ -435,10 +436,10 @@ public class ModeServiceImpl {
 					" order by (downloadCount+ldg_download_count) desc ,model_id desc");
 		} else if (SortTypeEnum.TIME.value().equals(sortType)) {
 			sql.append(" group by model_id,create_date");
-			sql.append(" order by create_date,model_id desc");
+			sql.append(" order by create_date desc ,model_id desc");
 		} else {
 			sql.append(" group by model_id,rating");
-			sql.append(" order by rating,model_id desc ");
+			sql.append(" order by rating desc ,model_id desc ");
 		}
 		sql.append(" limit ").append(pageNo).append(",").append(pageSize);
 		Query query = entityManager.createNativeQuery(sql.toString());

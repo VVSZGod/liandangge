@@ -47,15 +47,16 @@ public class ModelServiceDao {
 				+ " where m.status=1 and LOWER(t.tagText) like '%" + tag
 				+ "%' group by m.model_id) a";
 		if (SortTypeEnum.DOWN_COUNT.value().equals(sortType)) {
-			sql.append(" group by m.model_id,(m.downloadCount+m.ldg_download_count)");
+			sql.append(
+					" group by m.model_id,(m.downloadCount+m.ldg_download_count)");
 			sql.append(
 					" order by (m.downloadCount+m.ldg_download_count) desc ,m.model_id desc");
 		} else if (SortTypeEnum.TIME.value().equals(sortType)) {
 			sql.append(" group by m.model_id,m.create_date");
-			sql.append(" order by m.create_date,m.model_id desc");
+			sql.append(" order by m.create_date desc ,m.model_id desc");
 		} else {
 			sql.append(" group by m.model_id,m.rating");
-			sql.append(" order by m.rating,m.model_id desc ");
+			sql.append(" order by m.rating desc,m.model_id desc ");
 		}
 		sql.append(" limit ").append(pageNo).append(",").append(pageSize);
 		Query query = entityManager.createNativeQuery(sql.toString());
