@@ -262,8 +262,8 @@ public class ModeServiceImpl {
 					log.info("保存图片size Url==={}", qiniuUrl);
 					Integer width = imageInfo.getInteger("width");
 					Integer height = imageInfo.getInteger("height");
-					modelResponse.setImageHeight(height);
-					modelResponse.setImageWidth(width);
+					modelResponse.setImageHeight(height == null ? 0 : height);
+					modelResponse.setImageWidth(width == null ? 0 : width);
 					meta.setHeight(height);
 					meta.setWidth(width);
 					metaRepository.save(meta);
