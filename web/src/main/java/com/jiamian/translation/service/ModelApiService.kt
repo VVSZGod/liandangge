@@ -50,7 +50,7 @@ class ModelApiService {
         val specification = Specification { root: Root<Model?>, criteriaQuery: CriteriaQuery<*>?, cb: CriteriaBuilder ->
             val predicates: MutableList<Predicate> = Lists.newArrayList()
             predicates.add(cb.equal(root.get<Any>("status"), 1))
-            predicates.add(cb.isNotEmpty(root.get("model_url")))
+            predicates.add(cb.isNotEmpty(root.get("modelUrl")))
             cb.and(*predicates.toTypedArray())
         }
 
