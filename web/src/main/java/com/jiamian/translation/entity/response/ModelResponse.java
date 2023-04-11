@@ -63,4 +63,6 @@ public class ModelResponse {
 
 	private String description;
 
+	private boolean clickStat;
+
 }

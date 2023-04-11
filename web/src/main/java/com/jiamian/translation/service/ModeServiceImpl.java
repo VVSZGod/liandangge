@@ -354,6 +354,10 @@ public class ModeServiceImpl {
 		return modelList.stream().map(model -> {
 			ModelResponse modelResponse = new ModelResponse();
 			BeanUtil.copyProperties(model, modelResponse);
+			modelResponse.setClickStat(true);
+			if (model.getAliUrl().isEmpty()) {
+				modelResponse.setClickStat(false);
+			}
 			return modelResponse;
 		}).collect(Collectors.toList());
 	}
