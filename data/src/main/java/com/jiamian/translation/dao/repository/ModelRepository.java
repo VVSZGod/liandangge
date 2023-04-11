@@ -32,6 +32,6 @@ public interface ModelRepository
 	@Query(nativeQuery = true, value = "select * from model where status=:status and model_id=:modelId limit 1")
 	Optional<Model> selectModelByModelIdAndStatus(Long modelId, Integer status);
 
-	@Query(nativeQuery = true, value = "select * from model where   model_id=:modelId and description!='' limit 1")
+	@Query(nativeQuery = true, value = "select * from model where   model_id=:modelId and model_url!='' limit 1")
 	Optional<Model> selectModelByModelId(Long modelId);
 }
