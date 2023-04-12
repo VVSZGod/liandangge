@@ -44,8 +44,10 @@ public class ModelServiceDao {
 						+ " where m.status=1 and LOWER(t.tagText) like '%")
 				.append(tag).append("%' ");
 		String sqlCount = " select count(*) from ( select count(*) from  model m left join model_tags t on m.model_id=t.model_id"
-				+ " where m.status=1 and LOWER(t.tagText) like '%" + tag
-				+ "%' group by m.model_id) a";
+                + " where m.status=1 and LOWER(t.tagText) like '%" + tag
+                + "%' group by m.model_id) a";
+		// 不论上传多少模型，确保一个模型版本model_url不等于空展示列表
+		sql.append(" and (m.model_url!='' or m.model_url is not null)");
 		if (SortTypeEnum.DOWN_COUNT.value().equals(sortType)) {
 			sql.append(
 					" group by m.model_id,(m.downloadCount+m.ldg_download_count)");

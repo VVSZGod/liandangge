@@ -435,6 +435,8 @@ public class ModeServiceImpl {
 			sql.append(" and recommend=").append(recommend);
 			sqlCount.append(" and recommend=").append(recommend);
 		}
+		// 不论上传多少模型，确保一个模型版本model_url不等于空展示列表
+		sql.append(" and (model_url!='' or model_url is not null)");
 		sqlCount.append(" group by model_id").append(") a");
 		if (SortTypeEnum.DOWN_COUNT.value().equals(sortType)) {
 			sql.append(" group by model_id,(downloadCount+ldg_download_count)");
