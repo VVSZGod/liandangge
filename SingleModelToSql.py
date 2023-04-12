@@ -108,7 +108,8 @@ if __name__ == "__main__":
         model_version_id = mv['id']
         version = mv['name']
         create_date = formatDate(mv['createdAt'])
-        downloadUrl = 'https://civitai.com/api/download/models/{}'.format(model_version_id)
+        #downloadUrl = 'https://civitai.com/api/download/models/{}'.format(model_version_id)
+        downloadUrl = ''
         model_insert = model_insert_sql.format(model_id,model_name,model_type,model_version_id,downloadUrl,model_nsfw,model_description,downloadCount,favoriteCount,commentCount,ratingCount,rating,version,create_date)
         writeLineAndFlush(model_insert_f,model_insert)
 
