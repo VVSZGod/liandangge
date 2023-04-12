@@ -95,7 +95,7 @@ public class JwtHelper {
 				return 0L;
 			}
 		} catch (Exception exception) {
-			logger.error("解析token异常:{},{}", token, exception);
+			logger.error("解析token异常:{}", token);
 		}
 		return 0L;
 	}
