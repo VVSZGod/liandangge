@@ -1,0 +1,10 @@
+spring:
+  redis:
+    database:
+    host:
+    timeout: 1000
+    jedis:
+      pool:
+        max-active: 50
+        max-idle: 0
+

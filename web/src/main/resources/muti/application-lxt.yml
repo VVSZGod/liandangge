@@ -1,0 +1,8 @@
+# 验证码超时时间（秒）
+lxt.register_code_expire : 300
+
+lxt.sms.url  :
+lxt.account  :
+lxt.password :
+lxt.token    :
+lxt.templateid    :

@@ -1,0 +1,7 @@
+##七牛
+qiniu.access_key:
+qiniu.bucket:
+qiniu.secret_key:
+qiniu.domain:
+qiniu.video.waterMarkUrl:
+
