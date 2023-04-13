@@ -20,8 +20,8 @@ model_id = 3772
 ## 定义七牛
 # 七牛图片url
 qiniu_url_template = 'https://msdn.miaoshouai.com/msdn/image/{}'
-access_key = 'JDbRmZyb74Z17YhYiUv4sQterC7BRBU7HKH-ptBf'
-secret_key = 'E1mrlUNOneqOYOn1TvCOSZAdhyGzYvDmR05hFfjD'
+access_key = ''
+secret_key = ''
 bucket_name = 'msdn'
 qiniu_auth = qiniu.auth.Auth(access_key, secret_key)
 
