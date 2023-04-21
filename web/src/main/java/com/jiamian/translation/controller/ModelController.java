@@ -5,6 +5,7 @@ import java.util.Map;
 import cn.hutool.core.util.ObjectUtil;
 import com.jiamian.translation.enums.ModelTagEnum;
 import com.jiamian.translation.entity.response.ModelTagResponse;
+import com.jiamian.translation.exception.BOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,6 +58,9 @@ public class ModelController {
 			@RequestParam(value = "chine", required = false) @ApiParam("华人(不查不传) 1") Integer chine,
 			@RequestParam(value = "recommend", required = false) @ApiParam("推荐(不查不传) 1") Integer recommend,
 			@LoginUser Long userId) {
+		if(pageSize > 100){
+			throw new BOException("max pageSize 100");
+		}
 		if (ObjectUtil.isNotNull(chine) || ObjectUtil.isNotNull(recommend)) {
 			type = "";
 		}
