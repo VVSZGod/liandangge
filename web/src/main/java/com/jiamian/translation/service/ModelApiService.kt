@@ -163,6 +163,6 @@ class ModelApiService {
 
     companion object {
         //
-        private const val MODEL_DETAIL_URL = "https://models.paomiantv.cn/models/Detail?id=%s"
+        private const val MODEL_DETAIL_URL = "http://www.liandange.com/models/Detail?id=%s"
     }
 }
