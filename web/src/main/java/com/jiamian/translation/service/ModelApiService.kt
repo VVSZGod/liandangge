@@ -75,7 +75,8 @@ class ModelApiService {
             var baseModel = ""
             val downloadUrl = String.format(
                     MODEL_DETAIL_URL,
-                    dbModel.modelId
+                    dbModel.modelId,
+                    dbModel.modelVersionId
             )
 
 
@@ -163,6 +164,6 @@ class ModelApiService {
 
     companion object {
         //
-        private const val MODEL_DETAIL_URL = "http://www.liandange.com/models/Detail?id=%s"
+        private const val MODEL_DETAIL_URL = "http://www.liandange.com/models/Detail?id=%s&modelVersionId=%s"
     }
 }
