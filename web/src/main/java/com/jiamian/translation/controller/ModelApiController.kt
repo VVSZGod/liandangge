@@ -1,5 +1,6 @@
 package com.jiamian.translation.controller
 
+import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONObject
 import com.jiamian.translation.exception.BOException
 import com.jiamian.translation.service.ModelApiService
@@ -25,10 +26,11 @@ open class ModelApiController {
 
 
     @GetMapping("/models")
-    open fun pageModel(@RequestParam(value = "page") page: Int, @RequestParam(value = "limit") pageSize: Int): String {
+    open fun pageModel(@RequestParam(value = "page") page: Int, @RequestParam(value = "limit") pageSize: Int): JSONObject {
         if (pageSize > 100) {
             throw BOException("max pageSize limit 100")
         }
-        return JSONObject.toJSONString(modelApiService.pageModelApi(pageSize, page))
+        val pageModelApi = modelApiService.pageModelApi(pageSize, page)
+        return JSONObject.parseObject(JSON.toJSONString(pageModelApi))
     }
 }
