@@ -124,11 +124,11 @@ class ModelApiService {
             mvDTO.baseModel = baseModel
             val filesApiDTO = FilesApiDTO()
 
-            modelFileRepository.findByModelIdAndModelVersionId(mvDTO.modelId, mvDTO.id).takeIf {
+            modelFileRepository.findByModelIdAndModelVersionId(mvDTO.modelId, dbModel.modelVersionId).takeIf {
                 it.isPresent
             }?.get()?.let {
                 filesApiDTO.name = it.fileName
-                filesApiDTO.sizeKB = it.fileSize.takeIf { fileSize -> fileSize.isNotBlank() }?.toDouble()?: 0.0
+                filesApiDTO.sizeKB = it.fileSize.takeIf { fileSize -> fileSize.isNotBlank() }?.toDouble() ?: 0.0
                 filesApiDTO.id = it.fileId
                 filesApiDTO.primary = true
                 filesApiDTO.hashes = getHashCodeMap(it)
@@ -152,12 +152,12 @@ class ModelApiService {
                         imagesApiDTO.height = height
                         val metaApiDTO = MetaApiDTO()
                         metaApiDTO.Size = width.toString() + "x" + height
-                        metaApiDTO.seed = meta.seed.toLong()
+                        metaApiDTO.seed = meta.seed?.toLong() ?: 0L
                         metaApiDTO.Model = dbModel.name
-                        metaApiDTO.steps = meta.steps.toLong()
+                        metaApiDTO.steps = meta.steps?.toLong() ?: 0L
                         metaApiDTO.prompt = meta.prompt
                         metaApiDTO.sampler = meta.sampler
-                        metaApiDTO.cfgScale = meta.cfgScale.toDouble()
+                        metaApiDTO.cfgScale = meta.cfgScale?.toDouble() ?: 0.0
                         metaApiDTO.negativePrompt = meta.negativePrompt
                         imagesApiDTO.meta = metaApiDTO
                         images.add(imagesApiDTO)
