@@ -26,9 +26,12 @@ open class ModelApiController {
 
 
     @GetMapping("/models")
-    open fun pageModel(@RequestParam(value = "page") page: Int, @RequestParam(value = "limit") pageSize: Int): JSONObject {
-        if (pageSize > 100) {
-            throw BOException("max pageSize limit 100")
+    open fun pageModel(@RequestParam(value = "page", defaultValue = "1", required = false) page: Int, @RequestParam
+    (value = "limit", defaultValue = "20", required = false)
+    pageSize: Int):
+            JSONObject {
+        if (pageSize > 100 || page < 1) {
+            throw BOException("max pageSize limit 100 or page must greater than 0")
         }
         val pageModelApi = modelApiService.pageModelApi(pageSize, page)
         return JSONObject.parseObject(JSON.toJSONString(pageModelApi))

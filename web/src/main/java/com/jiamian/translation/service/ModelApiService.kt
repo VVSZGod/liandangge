@@ -64,7 +64,7 @@ class ModelApiService {
 
         val p = modelRepository.findAll(
                 specification,
-                PageRequest.of(pageIdx, pageSize, Sort.Direction.ASC, "id")
+                PageRequest.of(pageIdx - 1, pageSize, Sort.Direction.ASC, "id")
         )
 
         for (dbModel in p.content) {
