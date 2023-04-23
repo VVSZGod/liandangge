@@ -9,17 +9,17 @@ import com.google.common.collect.Lists
 
 data class ModelApiDTO(var id: Long) {
 
-     var name = ""
-     var description = ""
-     var type = ""
-     var poi = true
-     var nsfw = false
-     var allowCommercialUse = false
-     var allowNoCredit = false
-     var allowDerivatives = true
-     var allowDifferentLicense = false
-     var stats = StatusApiDTO()
-     var creator = CreatorApiDTO()
-     var tags: List<String> = Lists.newArrayList()
-     var modelVersions: List<ModelVersionsApiDTO> = Lists.newArrayList()
+    var name: String? = ""
+    var description: String? = ""
+    var type: String? = ""
+    var poi: Boolean? = true
+    var nsfw: Boolean? = false
+    var allowCommercialUse: Boolean? = false
+    var allowNoCredit: Boolean? = false
+    var allowDerivatives: Boolean? = true
+    var allowDifferentLicense: Boolean? = false
+    var stats = StatusApiDTO()
+    var creator = CreatorApiDTO()
+    var tags: List<String> = Lists.newArrayList()
+    var modelVersions: List<ModelVersionsApiDTO> = Lists.newArrayList()
 }

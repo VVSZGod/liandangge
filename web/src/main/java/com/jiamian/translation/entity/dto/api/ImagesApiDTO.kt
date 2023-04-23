@@ -9,15 +9,15 @@ import lombok.Data
  */
 @Data
 class ImagesApiDTO {
-    var url = ""
-    var nsfw = false
+    var url: String? = ""
+    var nsfw: Boolean? = false
     var width = 0
     var height = 0
-    var hash = ""
-    var userId = 0
-    var generationProcess = ""
-    var needsReview = false
-    var scannedAt = ""
+    var hash: String? = ""
+    var userId: Long? = 0
+    var generationProcess: String? = ""
+    var needsReview: Boolean? = false
+    var scannedAt: String? = ""
     var tags: List<String> = Lists.newArrayList()
     var meta: MetaApiDTO? = null
 }

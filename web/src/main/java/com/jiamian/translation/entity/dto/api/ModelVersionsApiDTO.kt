@@ -18,8 +18,8 @@ class ModelVersionsApiDTO {
     var trainedWords: List<String> = Lists.newArrayList()
     var baseModel: String? = null
     var earlyAccessTimeFrame = 0
-    var description = ""
-    var downloadUrl = ""
+    var description: String? = ""
+    var downloadUrl: String? = ""
     var files: List<FilesApiDTO>? = null
     var images: List<ImagesApiDTO>? = null
 }

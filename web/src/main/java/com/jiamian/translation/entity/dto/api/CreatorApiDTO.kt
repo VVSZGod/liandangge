@@ -5,6 +5,6 @@ package com.jiamian.translation.entity.dto.api
  * @date 2023/3/28
  */
 class CreatorApiDTO {
-    var username = ""
+    var username: String? = ""
     var image: String? = null
 }
