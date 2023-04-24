@@ -7,22 +7,22 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConditionalOnProperty(prefix = "qiniu", name = "bucket")
 public class QiNiuConfig {
-	@Value("${qiniu.access_key:4F9IoNkd6dYFYefon03WN-CyI7KMzd8mPJcL6M3p}")
+	@Value("${qiniu.access_key}")
 	private String accessKey;
 
-	@Value("${qiniu.bucket:ygjy-dev}")
+	@Value("${qiniu.bucket}")
 	private String bucket;
 
-	@Value("${qiniu.secret_key:Nb2hZ2sxtXPT28B0JttJUmzoqLJ4jig7jwZdyxiM}")
+	@Value("${qiniu.secret_key}")
 	private String secretKey;
 
-	@Value("${qiniu.domain:fpcache.fotoplace.cc}")
+	@Value("${qiniu.domain}")
 	private String domain;
 
-	@Value("${img.zip.ratio:0.25}")
+	@Value("${img.zip.ratio}")
 	private String ZIP_RATIO;
 
-	@Value("${qiniu.video.waterMarkUrl:http://78re52.com1.z0.glb.clouddn.com/resource%2Flogo.jpg}")
+	@Value("${qiniu.video.waterMarkUrl}")
 	private String videoWMUrl;
 
 	public String getAccessKey() {

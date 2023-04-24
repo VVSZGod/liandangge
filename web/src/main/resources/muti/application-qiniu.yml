@@ -1,7 +1,7 @@
 ##七牛
-qiniu.access_key: JDbRmZyb74Z17YhYiUv4sQterC7BRBU7HKH-ptBf
-qiniu.bucket: msdn
-qiniu.secret_key: E1mrlUNOneqOYOn1TvCOSZAdhyGzYvDmR05hFfjD
-qiniu.domain: msdn.miaoshouai.com
-qiniu.video.waterMarkUrl: https://system.dongsenzs.com/system/demo/watermark.png
+qiniu.access_key:
+qiniu.bucket:
+qiniu.secret_key:
+qiniu.domain:
+qiniu.video.waterMarkUrl:
 

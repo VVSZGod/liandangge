@@ -26,18 +26,18 @@ import cn.hutool.core.util.ObjectUtil;
 public class YiDunApi {
     private final static Logger log = LoggerFactory.getLogger(YiDunApi.class);
     //secret key
-    private final static String SECRETKEY = "481a376641726afe952bb01a8587f442";
+    private final static String SECRETKEY = "";
 
     //secret id
-    private final static String SECRETID = "a93651b8db7a3b12c1926deb9989470f";
+    private final static String SECRETID = "";
 
     //business id
-    private final static String BUSINESSID = "9384bd0644c17cd47518028551341b5e";
-    private final static String IMAGE_BUSINESSID = "707e9bd68caa5333de5800571bc694d0";
-    private final static String VIDEO_BUSINESSID = "30366d6235bbb4b01e27abc124eb98f6";
+    private final static String BUSINESSID = "";
+    private final static String IMAGE_BUSINESSID = "";
+    private final static String VIDEO_BUSINESSID = "";
 
-    private final static String NICK_NAME_BUSINESSID = "0c323c6fc42cd490b11cc954ecdcf844";
-    private final static String HEAD_IMG_URL_BUSINESSID = "6926dd96bd7fcc6a7ed5b36b25e891a6";
+    private final static String NICK_NAME_BUSINESSID = "";
+    private final static String HEAD_IMG_URL_BUSINESSID = "";
 
 
     //易盾文本检查接口地址
