@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import com.jiamian.translation.common.service.ChuanlanService;
 import com.jiamian.translation.entity.MachineCheckResult;
 import com.jiamian.translation.entity.MachineCheckResultEnum;
 import com.jiamian.translation.util.YiDunApi;
@@ -48,7 +49,7 @@ public class UserServiceImpl {
 	private static final Logger logger = LoggerFactory
 			.getLogger(UserServiceImpl.class);
 
-	@Value("${lxt.register_code_expire:300}")
+	@Value("${chuanlan.register_code_expire:300}")
 	private String REGISTER_CODER_EXPIRE;
 
 	@Value("${translation.user.avatar.url}")
@@ -64,7 +65,7 @@ public class UserServiceImpl {
 	private UserInfoRepository userInfoRepository;
 
 	@Autowired
-	private LxtService lxtService;
+	private ChuanlanService chuanlanService;
 
 	private static String REGISTER_SMS_PREFIX = "register_code:";
 
@@ -144,8 +145,8 @@ public class UserServiceImpl {
 		// Step1: 生成验证码
 		String pushCode = RandomStringUtils.randomNumeric(4);
 		if ("86".equals(countryCode)) {
-			codeSendResult = lxtService
-					.sendMessage(new ShortMessage(phoneNumber, "", pushCode));
+			codeSendResult = chuanlanService
+					.send(new ShortMessage(phoneNumber, "", pushCode));
 		}
 		logger.info("pushCode: " + pushCode);
 		// 5. 发送成功,保存注册码,待验证

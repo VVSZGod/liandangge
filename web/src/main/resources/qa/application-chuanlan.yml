@@ -1,0 +1,6 @@
+# 验证码超时时间（秒）
+chuanlan.register_code_expire: 300
+  
+chuanlan.sms.url: 
+chuanlan.account:
+chuanlan.password:
